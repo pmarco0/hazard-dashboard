@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hazard Dashboard</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/user.css">
+	<link rel="stylesheet" href="assets/css/font-awesome.min.css">
+
+</head>
+
+<body>
+    <div class="container-fluid">
+		<div class="row main-row row-eq-height">
+		
+		
+			<div class="col-lg-2 col-md-2 panel panel-default status-col">
+				<div class="panel-header">
+					<h3 class="text-uppercase text-primary"><strong>Status di Gioco</strong></h3>
+					<h5 class="text-uppercase text-primary">Turno 1</h5>
+				</div>
+				<div class="panel-body">
+					<div class="row">
+						<hr/>
+						<h5 class="text-uppercase text-muted"><strong>Percentuale Infezione</strong></h5>
+						<div class="progress">
+						  <div class="progress-bar" id="progressinf" role="progressbar" aria-valuenow="0"
+						  aria-valuemin="0" aria-valuemax="100" style="width:0%">
+							0% 
+						  </div>
+						</div>
+					</div>
+					
+					<div class="row">
+						<hr/>
+						<h5 class="text-uppercase text-muted"><strong>Log di Gioco</strong></h5>
+						<div class="well well-lg" id="log-area" style="min-height: 10em;max-height: 10em;overflow-y: scroll;"></div>
+					</div>
+					
+					<div class="row">
+						<hr/>
+						<h5 class="text-uppercase text-muted"><strong>Risorse</strong></h5>
+						<ul>
+							<li><i class="fa fa-ambulance fa-lg" aria-hidden="true"></i>0</li>
+							<li><i class="fa fa-coffee fa-lg" aria-hidden="true"></i>100</li>
+
+						</ul>
+					</div>
+
+				</div>
+			</div>
+			
+			
+			<div class="col-lg-10 col-md-10">
+				<div class="map-container">
+					<div class="map">Alternative content</div>
+				</div>
+				<h4 class="text-primary text-uppercase text-center" id="cont"><strong>Contagiosit&Agrave;</strong></h4>
+				<ul id="progress" current="0">
+					<!-- step bar-->
+				</ul>
+			</div>
+		</div>
+	
+		
+
+    </div>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+	<script src="assets/vmap/raphael.min.js"></script>
+	<script src="assets/vmap/jquery.mapael.min.js"></script>
+	<script src="assets/vmap/maps/world_countries_miller.min.js"></script>
+	<script src="assets/vmap/setup.js"></script>
+	<script src="assets/js/interaction.js"></script>
+
+</script>
+</body>
+
+</html>
