@@ -1,0 +1,11 @@
+### Batch ###
+# BatchFiles
+*.bat
+*.cmd
+*.btm
+
+# Release Subfolder
+release/
+
+# Node Modules
+node_modules/

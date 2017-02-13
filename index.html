@@ -7,19 +7,19 @@
     <title>Hazard Dashboard</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/user.css">
+	<link rel="stylesheet" href="assets/css/contextual-modals.css">
 	<link rel="stylesheet" href="assets/css/font-awesome.min.css">
-
 </head>
 
 <body>
-    <div class="container-fluid">
+    <div id="#game-board" class="container-fluid">
 		<div class="row main-row row-eq-height">
 		
 		
 			<div class="col-lg-2 col-md-2 panel panel-default status-col">
 				<div class="panel-header">
 					<h3 class="text-uppercase text-primary"><strong>Status di Gioco</strong></h3>
-					<h5 class="text-uppercase text-primary">Turno 1</h5>
+					<h5 class="text-uppercase text-primary" id="turnTitle" turn=0></h5>
 				</div>
 				<div class="panel-body">
 					<div class="row">
@@ -64,16 +64,35 @@
 			</div>
 		</div>
 	
-		
-
     </div>
+	
+	<!-- Modal -->
+	<div id="myModal" class="modal fade"  data-backdrop="static" data-keyboard="false" role="dialog">
+	  <div class="modal-dialog">
+
+		<!-- Modal content-->
+		<div class="modal-content">
+		  <div class="modal-header">
+			<h4 class="modal-title" id="modal-message-title"></h4>
+		  </div>
+		  <div class="modal-body">
+			<p id="modal-message-text"></p>
+		  </div>
+		  <div class="modal-footer" id="modal-buttons">
+		  </div>
+		</div>
+
+	  </div>
+	</div>
+	
     <script src="assets/js/jquery.min.js"></script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
 	<script src="assets/vmap/raphael.min.js"></script>
 	<script src="assets/vmap/jquery.mapael.min.js"></script>
 	<script src="assets/vmap/maps/world_countries_miller.min.js"></script>
 	<script src="assets/vmap/setup.js"></script>
-	<script src="assets/js/interaction.js"></script>
+	<script src="assets/js/socket.io.min.js"></script>
+	<script src="assets/js/init.js"></script>
 
 </script>
 </body>
