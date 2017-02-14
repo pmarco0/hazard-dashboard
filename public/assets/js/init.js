@@ -1,18 +1,21 @@
-
+window.$ = window.jQuery = require('./jquery.min.js');
+var io = require('./socket.io.min.js');
+var l = require('./lang.js');
+var config = require('./config.js');
+var lang = l.italian;
 
 $(document).ready(function() {
-	for(i = 0; i<9;i++){
+	for(i = 0; i<config['MAX_LEVEL'];i++){
 		$('#progress').append('<li id="layer'+(i+1)+'" class="ball"></li>');
 	}
+	
 	var modalClass = "modal-primary";
-	var modalTitle = "Attendi...";
-	var modalText = "Caricamento in Corso";
 	$('#modal-buttons').empty();
 	$('#modal-buttons').append('<button type="button" id="start-game-button" disabled=true class="btn btn-default" data-dismiss="modal"><i class="fa fa-spinner fa-spin fa-2x"></i></button>');
 	$('#myModal').removeClass();
 	$('#myModal').addClass('modal fade '+modalClass);
-	$('#modal-message-title').html(modalTitle)
-	$('#modal-message-text').html(modalText);
+	$('#modal-message-title').html(lang['wait'])
+	$('#modal-message-text').html(lang['loading']);
 	$('#myModal').modal("show");
 });
 
@@ -20,33 +23,29 @@ function nextTurn(){
 	var turn = parseInt($('#turnTitle').attr('turn'));
 	turn=turn+1;
 	$('#turnTitle').attr('turn',turn);
-	$('#turnTitle').html("Turno "+turn);
-	addLog('INFO','Inizia il turno '+turn)
+	$('#turnTitle').html(lang['turn']+" "+turn);
+	addLog('INFO',lang['turn_starts'] +' '+turn)
 }
 
 function gameStart(){
 	$('#start-game-button').attr('disabled',false);
 	$('#start-game-button').empty();
 	$('#start-game-button').html("OK");
-	var modalTitle = "Inizia il Gioco";
-	var modalText = "Premi OK per iniziare la partita";
-	$('#modal-message-title').html(modalTitle)
-	$('#modal-message-text').html(modalText);
-	addLog('INFO',"Inizia il gioco");
+	$('#modal-message-title').html(lang['gamestart'])
+	$('#modal-message-text').html(lang['oktostart']);
+	addLog('INFO',lang['gamestartstext']);
 	nextTurn();
 }
 
 function gameOver(){
-	addLog('DANGER','Game Over');
+	addLog('DANGER',lang['gameover']);
 	var modalClass = "modal-danger";
-	var modalTitle = "Game Over";
-	var modalText = "La malattia ha preso il sopravvento";
 	$('#modal-buttons').empty();
-	$('#modal-buttons').append('<button type="button" class="btn btn-default" data-dismiss="modal" onclick="location.reload();">Ricomincia</button>');
+	$('#modal-buttons').append('<button type="button" class="btn btn-default" data-dismiss="modal" onclick="location.reload();">'+lang['restart']+'</button>');
 	$('#myModal').removeClass();
 	$('#myModal').addClass('modal fade '+modalClass);
-	$('#modal-message-title').html(modalTitle)
-	$('#modal-message-text').html(modalText);
+	$('#modal-message-title').html(lang['gameover'])
+	$('#modal-message-text').html(lang['gameovertext']);
 	$('#myModal').modal("show");
 }
 
@@ -70,7 +69,7 @@ function setProgress(value){
 function setLevel(value){
 	var current = parseInt($('#progress').attr('current'));
 	if(value > 0){
-		if(current == 9) return;
+		if(current == config['MAX_LEVEL']) return;
 		var currentLevelType = Math.ceil((current+1)/3);
 		if(currentLevelType ==1 || current == 0){
 			var levelClass = 'ball-ok';
@@ -108,17 +107,17 @@ function addLog(type,text){
 		case "DANGER":
 			var class1 = "fa fa-exclamation-triangle";
 			var color="#DE2203";
-			$("#log-area").prepend("<p id='"+timestamp+"'><font class=\"text-muted\">["+time+"] (Turno "+$('#turnTitle').attr('turn')+"): </font><i class='"+class1+"' style='color:"+color+";' aria-hidden='true'></i> "+text+"</p><hr class='style3'/>");
+			$("#log-area").prepend("<p id='"+timestamp+"'><font class=\"text-muted\">["+time+"] ("+lang['turn']+" "+$('#turnTitle').attr('turn')+"): </font><i class='"+class1+"' style='color:"+color+";' aria-hidden='true'></i> "+text+"</p><hr class='style3'/>");
 			break;
 		case "INFO":
 			var class1 = "fa fa-flag";
 			var color  = "#337AB7";
-			$("#log-area").prepend("<p id='"+timestamp+"'><font class=\"text-muted\">["+time+"] (Turno "+$('#turnTitle').attr('turn')+"): </font><i class='"+class1+"' style='color:"+color+";' aria-hidden='true'></i> "+text+"</p><hr class='style3'/>");
+			$("#log-area").prepend("<p id='"+timestamp+"'><font class=\"text-muted\">["+time+"] ("+lang['turn']+" "+$('#turnTitle').attr('turn')+"): </font><i class='"+class1+"' style='color:"+color+";' aria-hidden='true'></i> "+text+"</p><hr class='style3'/>");
 		break;
 		case "WARNING":
 			var class1 = "fa fa-exclamation";
 			var color='#FEA500';
-			$("#log-area").prepend("<p id='"+timestamp+"'><font class=\"text-muted\">["+time+"] (Turno "+$('#turnTitle').attr('turn')+"): </font><i class='"+class1+"' style='color:"+color+";' aria-hidden='true'></i> "+text+"</p><hr class='style3'/>");
+			$("#log-area").prepend("<p id='"+timestamp+"'><font class=\"text-muted\">["+time+"] ("+lang['turn']+" "+$('#turnTitle').attr('turn')+"): </font><i class='"+class1+"' style='color:"+color+";' aria-hidden='true'></i> "+text+"</p><hr class='style3'/>");
 			break;
 	}
 	
