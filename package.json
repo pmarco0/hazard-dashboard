@@ -10,7 +10,7 @@
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-	 "bundle": "browserify ./public/assets/js/init.js -o ./public/assets/compiled-js/bundle.js",
+	 "bundle": "browserify ./public/assets/js/init.js -o ./public/assets/compiled-js/bundle.js && minify --output ./public/assets/compiled-js/bundle.min.js ./public/assets/compiled-js/bundle.js",
 	 "compile" : "./run.sh",
 	 "run" : "node app.js",
 	 "clean" : "rm -rf ./release/dashboard",

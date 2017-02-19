@@ -24,7 +24,7 @@ function nextTurn(){
 	turn=turn+1;
 	$('#turnTitle').attr('turn',turn);
 	$('#turnTitle').html(lang['turn']+" "+turn);
-	addLog('INFO',lang['turn_starts'] +' '+turn)
+	addLog('INFO',lang['turn_start'] +' '+turn)
 }
 
 function gameStart(){
