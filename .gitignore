@@ -1,9 +1,3 @@
-### Batch ###
-# BatchFiles
-*.bat
-*.cmd
-*.btm
-
 # Release Subfolder
 release/
 
