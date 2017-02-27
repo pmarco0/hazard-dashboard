@@ -146,7 +146,7 @@ $(".map-container").mapael({
 	},
 	
 	//QUI DEFINISCO LE CITTA'
-	/*plots :{
+	plots :{
 		'paris': {
 			type : plotType,
 			size : defaultSize,
@@ -174,5 +174,5 @@ $(".map-container").mapael({
 				'text' : 'x';
 			}
 		}
-	}*/
+	}
 });
