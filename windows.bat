@@ -12,3 +12,4 @@ cmd /C browserify .\%publicassets%\assets\js\init.js -o .\release\%folder%\%publ
 cmd /C minify --output .\release\%folder%\%publicassets%\assets\compiled-js\bundle.min.js .\release\%folder%\%publicassets%\assets\compiled-js\bundle.js
 echo "Server Running"
 node ./release/dashboard/app.js
+pause
