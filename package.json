@@ -4,17 +4,22 @@
   "description": "",
   "main": "app.js",
   "dependencies": {
+    "bufferutil": "^2.0.1",
     "express": "^4.14.1",
-    "socket.io": "^1.7.2"
+    "jquery": "^3.1.1",
+    "jquery-mapael": "^2.0.0",
+    "raphael": "^2.2.7",
+    "socket.io": "^1.7.2",
+    "utf-8-validate": "^3.0.1"
   },
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-	 "bundle": "browserify ./public/assets/js/init.js -o ./public/assets/compiled-js/bundle.js && minify --output ./public/assets/compiled-js/bundle.min.js ./public/assets/compiled-js/bundle.js",
-	 "compile" : "./run.sh",
-	 "run" : "node app.js",
-	 "clean" : "rm -rf ./release/dashboard",
-	 "cleanrun" : "npm run clean && npm run bundle && npm run run"
+    "bundle": "browserify ./public/assets/js/init.js -o ./public/assets/compiled-js/bundle.js && minify --output ./public/assets/compiled-js/bundle.min.js ./public/assets/compiled-js/bundle.js",
+    "compile": "./run.sh",
+    "run": "node app.js",
+    "clean": "rm -rf ./release/dashboard",
+    "cleanrun": "npm run clean && npm run bundle && npm run run"
   },
   "repository": {
     "type": "git",

@@ -1,4 +1,6 @@
-window.$ = window.jQuery = require('./jquery.min.js');
+window.$ = window.jQuery   = require('jquery');
+var Raphael = require('raphael');
+require('jquery-mousewheel');
 var io = require('./socket.io.min.js');
 var l = require('./lang.js');
 var config = require('./config.js');
@@ -35,6 +37,22 @@ function gameStart(){
 	$('#modal-message-text').html(lang['oktostart']);
 	addLog('INFO',lang['gamestartstext']);
 	nextTurn();
+
+
+	/*TEST DA RIMUOVERE*/
+
+   var updatedOptions = {'areas': {}, 'plots': {}};
+   var vars = [];
+   vars['Risorsa 1'] = 50;
+   vars['Risorsa 2'] = 40;
+   console.log(buildTooltip('Canada',vars));
+   updatedOptions.areas['America2'] = {
+   		value: 3,
+   };
+   updatedOptions.plots['canada'] = {
+   	   tooltip : buildTooltip('Canada',vars),
+   }
+   updateMap(updatedOptions,{},{});
 }
 
 function gameOver(){
@@ -128,6 +146,26 @@ function addLog(type,text){
 		$('#'+timestamp).css('background-color','transparent');
 	});
 	
+}
+
+
+function updateMap(updatedOptions,newPlots,deletedPlots){
+    $(".map-container").trigger('update', [{
+        mapOptions: updatedOptions, 
+        newPlots: newPlots, 
+        deletePlotKeys: deletedPlots,
+        animDuration: 1000
+    }]);
+}
+
+/*UTILS*/
+function buildTooltip(name,vars){
+	var content_text = '<span style=\"font-weight:bold;\">Zona :</span>' + name;
+	for(var key in vars){
+		content_text += '<span style=\"font-weight:bold;\">'+key+' :</span> '+vars[key]+'<br />';
+	}
+	var tooltip = {content: content_text}
+	return tooltip;
 }
 
 /*IMPOSTO I SOCKET*/
