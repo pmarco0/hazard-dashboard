@@ -105,8 +105,13 @@
         // The map configuration object (taken from map file)
         self.mapConf = {};
 
+        // Marco, Player object
+        self.$player = {};
+
         // Let's start the initialization
         self.init();
+
+
     };
 
     /*
@@ -138,6 +143,10 @@
 
             // Get the map container, empty it then append tooltip
             self.$map = $("." + self.options.map.cssClass, self.container).empty().append(self.$tooltip);
+
+            // Create Player icon and append to map, Marco
+            self.$player =  $('<img>').attr('src','./assets/img/icon.png').css('display','none');
+
 
             // Get the map from $.mapael or $.fn.mapael (backward compatibility)
             if ($[pluginName] && $[pluginName].maps && $[pluginName].maps[self.options.map.name]) {
@@ -235,6 +244,11 @@
             // Attach update event
             self.$container.on("update." + pluginName, function (e, opt) {
                 self.onUpdateEvent(e, opt);
+            });
+
+            // Attach Player Move event (Marco)
+            self.$container.on("playermove."+pluginName,function(e,opt){
+                self.onPlayerMoveEvent(e,opt);
             });
 
             // Attach showElementsInRange event
@@ -408,6 +422,44 @@
 
             $(elem.mapElem.node).attr("data-id", id);
         },
+
+
+        /*
+         * Player Movement Event - Marco
+         * @param movementOptions: from, to
+         *
+         */
+
+         onPlayerMoveEvent : function (e, opt) {
+            var self = this;
+            if(typeof opt !== "object" || typeof opt.movementOptions !== "object") return;
+
+            self.$player = $('<img>').attr('src','./assets/img/icon.png');
+            self.$player.css('position','absolute');
+
+            var $start = {
+                top : self.plots[opt.movementOptions.from].mapElem.displayedTooltip.offset().top,
+                left : self.plots[opt.movementOptions.from].mapElem.displayedTooltip.offset().left,
+            };
+
+            var $end = {
+                top : self.plots[opt.movementOptions.to].mapElem.displayedTooltip.offset().top,
+                left : self.plots[opt.movementOptions.to].mapElem.displayedTooltip.offset().left,
+            };
+            self.$player.css('left', $start.left);
+            self.$player.css('top',$start.top);
+            self.$player.css('display','block');
+            self.$map.append(self.$player);
+            self.$player.animate({
+                top : $end.top,
+                left: $end.left,
+            }, 2000, function(){
+                self.$player.css('display','none');
+            });
+        
+
+         },
+
 
         /*
          * Init zoom and panning for the map
@@ -1282,12 +1334,14 @@
             }
 
             // Update the tooltip
+            // Edit Marco 
             if (elemOptions.tooltip) {
                 if (elem.mapElem.tooltip === undefined) {
                     self.setTooltip(elem.mapElem);
                     if (elem.textElem) self.setTooltip(elem.textElem);
                 }
                 elem.mapElem.tooltip = elemOptions.tooltip;
+                self.setTooltip(elem.mapElem); // Force tooltip re-generation
                 if (elem.textElem) elem.textElem.tooltip = elemOptions.tooltip;
             }
 
@@ -1374,17 +1428,122 @@
             });
         },
 
+
+        /*
+         * Set a tooltip for the areas and plots
+         * Edited (Marco 09/03) - Multiple tooltips
+         * @param elem area or plot element
+         * @param content the content to set in the tooltip
+         */
+
+        setTooltip(elem){
+            var self = this;
+            var tooltipTO = 0;
+            var cssClass = self.$tooltip.attr('class');
+
+            self.$map.find('#'+elem.id+'-tooltip').remove();
+            elem.displayedTooltip = $("<div>").addClass(cssClass).css("display", "none");
+            elem.displayedTooltip.attr('id',elem.id+'-tooltip');
+
+            var updateTooltipPosition = function (x, y) {
+
+                var offsetLeft = 10;
+                var offsetTop = 20;
+
+                if (typeof elem.tooltip.offset === "object") {
+                    if (typeof elem.tooltip.offset.left !== "undefined") {
+                        offsetLeft = elem.tooltip.offset.left;
+                    }                    
+                    if (typeof elem.tooltip.offset.top !== "undefined") {
+                        offsetTop = elem.tooltip.offset.top;
+                    }
+                }
+
+                var tooltipPosition = {
+                    "left": Math.min(self.$map.width() - elem.displayedTooltip.outerWidth() - 5, x - self.$map.offset().left + offsetLeft),
+                    "top": Math.min(self.$map.height() - elem.displayedTooltip.outerHeight() - 5, y - self.$map.offset().top + offsetTop)
+                };
+
+                if (typeof elem.tooltip.overflow === "object") {
+                    if (elem.tooltip.overflow.right === true) {
+                        tooltipPosition.left = x - self.$map.offset().left + 10;
+                    }
+                    if (selem.tooltip.overflow.bottom === true) {
+                        tooltipPosition.top = y - self.$map.offset().top + 20;
+                    }
+                }
+
+                elem.displayedTooltip.css(tooltipPosition);
+                self.$map.append(elem.displayedTooltip);
+            };
+
+
+            if(elem.tooltip.persistent == true){
+
+                 elem.displayedTooltip.attr("class", cssClass);
+                  if (elem.tooltip !== undefined) {
+                    if (elem.tooltip.content !== undefined) {
+                        // if tooltip.content is function, call it. Otherwise, assign it directly.
+                        var content = (typeof elem.tooltip.content === "function") ? elem.tooltip.content(elem) : elem.tooltip.content;
+                        elem.displayedTooltip.html(content).css("display", "block");
+                    }
+                    if (elem.tooltip.cssClass !== undefined) {
+                        elem.displayedTooltip.addClass(elem.tooltip.cssClass);
+                    }
+                }
+
+                /*
+                    Setting position based on:
+                    - https://www.vincentbroute.fr/mapael/raphael-js-documentation/index.html#Element.node
+                    - http://api.jquery.com/offset/
+                */
+                var currentNode = $(elem.node);
+                var offset = currentNode.offset();
+                updateTooltipPosition(offset.left,offset.top);
+
+               }
+               else
+               {
+
+                   $(elem.node).on("mouseover." + pluginName, function (e) {
+                        tooltipTO = setTimeout(
+                            function () {
+                                self.$tooltip.attr("class", cssClass);
+                                if (elem.tooltip !== undefined) {
+                                    if (elem.tooltip.content !== undefined) {
+                                        // if tooltip.content is function, call it. Otherwise, assign it directly.
+                                        var content = (typeof elem.tooltip.content === "function") ? elem.tooltip.content(elem) : elem.tooltip.content;
+                                        self.$tooltip.html(content).css("display", "block");
+                                    }
+                                    if (elem.tooltip.cssClass !== undefined) {
+                                        self.$tooltip.addClass(elem.tooltip.cssClass);
+                                    }
+                                }
+                                updateTooltipPosition(e.pageX, e.pageY);
+                            }, 120
+                        );
+                    }).on("mouseout." + pluginName, function () {
+                        clearTimeout(tooltipTO);
+                        self.$tooltip.css("display", "none");
+                    }).on("mousemove." + pluginName, function (e) {
+                        updateTooltipPosition(e.pageX, e.pageY);
+                    });
+
+            }
+
+        },
+
+
+
         /*
          * Set a tooltip for the areas and plots
          * @param elem area or plot element
          * @param content the content to set in the tooltip
          */
-        setTooltip: function (elem) {
+        /*setTooltip: function (elem) {
             var self = this;
             var tooltipTO = 0;
             var cssClass = self.$tooltip.attr('class');
-
-
 
             var updateTooltipPosition = function (x, y) {
 
@@ -1418,33 +1577,8 @@
             };
 
 
-            /*
-                Forza i tooltip sempre visibili
-                Marco - 07/03
-            */
 
-             self.$tooltip.attr("class", cssClass);
-              if (elem.tooltip !== undefined) {
-                if (elem.tooltip.content !== undefined) {
-                    // if tooltip.content is function, call it. Otherwise, assign it directly.
-                    var content = (typeof elem.tooltip.content === "function") ? elem.tooltip.content(elem) : elem.tooltip.content;
-                    self.$tooltip.html(content).css("display", "block");
-                }
-                if (elem.tooltip.cssClass !== undefined) {
-                    self.$tooltip.addClass(elem.tooltip.cssClass);
-                }
-            }
-
-            /*
-                Setting position based on:
-                - https://www.vincentbroute.fr/mapael/raphael-js-documentation/index.html#Element.node
-                - http://api.jquery.com/offset/
-            */
-            var currentNode = $(elem.node);
-            var offset = currentNode.offset();
-            updateTooltipPosition(offset.left,offset.top);
-
-            /*$(elem.node).on("mouseover." + pluginName, function (e) {
+            $(elem.node).on("mouseover." + pluginName, function (e) {
                 tooltipTO = setTimeout(
                     function () {
                         self.$tooltip.attr("class", cssClass);
@@ -1466,8 +1600,8 @@
                 self.$tooltip.css("display", "none");
             }).on("mousemove." + pluginName, function (e) {
                 updateTooltipPosition(e.pageX, e.pageY);
-            });*/
-        },
+            });
+        },*/
 
         /*
          * Set user defined handlers for events on areas and plots

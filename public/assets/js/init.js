@@ -45,14 +45,15 @@ function gameStart(){
    var vars = [];
    vars['Risorsa 1'] = 50;
    vars['Risorsa 2'] = 40;
-   console.log(buildTooltip('Canada',vars));
+   console.log(__buildTooltip('Canada',vars));
    updatedOptions.areas['America2'] = {
    		value: 3,
    };
    updatedOptions.plots['canada'] = {
-   	   tooltip : buildTooltip('Canada',vars),
+   	   tooltip : __buildTooltip('Canada',vars),
    }
    updateMap(updatedOptions,{},{});
+   movePlayer('canada','usa');
 }
 
 function gameOver(){
@@ -158,9 +159,44 @@ function updateMap(updatedOptions,newPlots,deletedPlots){
     }]);
 }
 
+function movePlayer(fromv,tov){
+	var movement = {
+		from: fromv,
+		to: tov,
+	};
+	
+	__removePlayer(movement.from);
+	$('.map-container').trigger('playermove', [{
+		movementOptions : movement,
+	}]);
+	__setPlayer(movement.to);
+}
+
+
+function __removePlayer(plot){
+	 var updatedOptions = {'plots': {}};
+	 updatedOptions.plots[plot] = {
+	 	type: 'rounded',
+	 	size : 3,
+	}
+	updateMap(updatedOptions,{},{});
+}
+
+function __setPlayer(plot){
+	 var updatedOptions = {'plots': {}};
+	 updatedOptions.plots[plot] = {
+	 	type: 'image',
+	 	url : './assets/img/icon.png',
+	 	width: 8,
+	 	height: 8,
+	 }
+	 updateMap(updatedOptions,{},{});
+}
+
+
 /*UTILS*/
-function buildTooltip(name,vars){
-	var content_text = '<span style=\"font-weight:bold;\">Zona :</span>' + name;
+function __buildTooltip(name,vars){
+	var content_text = '<span style=\"font-weight:bold;\">Zona :</span>' + name+'<br/>';
 	for(var key in vars){
 		content_text += '<span style=\"font-weight:bold;\">'+key+' :</span> '+vars[key]+'<br />';
 	}

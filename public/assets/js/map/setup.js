@@ -18,156 +18,104 @@ $(".map-container").mapael({
 		"Asia1": {
 			
 			value:1,
-			attrs : {
-				 fill: "#FFFF00"
-			},
+			
 		},
 		"Asia2": {
 			
 			value:1,
-			attrs : {
-				 fill: "#E4D82C"
-			},
+			
 		},
 		"Asia3": {
 
 			value:1,
-			attrs : {
-				 fill: "#DFD055"
-			},
+			
 		},		
 		"Asia4": {
 			value:1,
-			attrs : {
-				 fill: "#FCF463"
-			},
+			
 		},		
 		"Asia5": {
 			value:1,
-			attrs : {
-				 fill: "#F6F62F"
-			},
+			
 		},		
 		"Asia6": {
 			value:1,
-			attrs : {
-				 fill: "#FCC95F"
-			},
+			
 		},		
 		"Asia7": {
 			value:1,
-			attrs : {
-				 fill: "#909300"
-			},
+			
 		},		
 		"Oce1": { //Australia
 			value:1,
-			attrs : {
-				 fill: "#69B628"
-			},
+			
 		},		
 		"Oce2": { //Nuova Zelanda
 			value:1,
-			attrs : {
-				 fill: "#9DDE67"
-			},
+			
 		},		
 		"Africa1": { //Nord Africa
 			value:1,
-			attrs : {
-				 fill: "#444444"
-			},
+			
 		},
 		"Africa2": { //Africa Centrale
 			value:1,
-			attrs : {
-				 fill: "#000"
-			},
+			
 		},		
 		"Africa3": { //Sud Centrale
 			value:1,
-			attrs : {
-				 fill: "#828282"
-			},
+			
 		},
 		"Africa4": { //Madagascar
 			value:1,
-			attrs : {
-				 fill: "#CCCCCC"
-			},
+			
 		},		
 		"Eu1": { //Eu Ovest
 			value:1,
-			attrs : {
-				 fill: "#6699FF" 
-			},
-            tooltip: {content: "<span style=\"font-weight:bold;\">Livello Infezione:</span>50%"}
-		},		
+					},		
 		"Eu2": { //Eu Est
 			value:1,
-			attrs : {
-				 fill: "#00C0F8"
-			},
+			
 		},		
 		"Eu3": { //Scandinavia
 			value:1,
-			attrs : {
-				 fill: "#000080"
-			},
+			
 		},		
 		"Eu4": { //UK
 			value:1,
-			attrs : {
-				 fill: "#0074E4"
-			},
+			
 		},		
 		"Eu5": { //Islanda
 			value:1,
-			attrs : {
-				 fill: "#54D8FC"
-			},
+			
 		},		
 		"America1": { //Groenlandia
 			value:5,
-			attrs : {
-				 fill: "#FC0044"
-			},
+			
 		},		
 		"America2": { //Canada
 			value:1,
-			attrs : {
-				 fill: "#900808"
-			},
+			
 		},		
 		"America3": { //USA
 			value:1,
-			attrs : {
-				 fill: "#FF0000"
-			},
+			
 		},		
 		"America4": { //America Centrale
 			value:1,
-			attrs : {
-				 fill: "#CC0000"
-			},
+			
 		},		
 		"America5": { //Sud America Colombia,Bolive ecc
 			value:1,
-			attrs : {
-				 fill: "#E2004F"
-			},
+			
 		},		
 		"America6": { //Sud America Brasile
 			value:1,
-			attrs : {
-				 fill: "#FF525F"
-			},
+			
 		},		
 		"America7": { //Sud America Argentina,Uruguay, ...
 			value:1,
-			attrs : {
-				 fill: "#C61800"
-			},
+			
 		},
 
 	},
@@ -213,7 +161,7 @@ $(".map-container").mapael({
 	//QUI DEFINISCO LE CITTA'
 	plots :{
 		'canada': {
-			type : 'plotType',
+			type : plotType,
 			size : defaultSize,
 			latitude: 70,
 			longitude: 30,
@@ -221,9 +169,25 @@ $(".map-container").mapael({
 						offset : {
 							left:25,
 							top: -5,
-						}
+						},
+						persistent:true,
 					 },
 			text : 'Canada'
+		},
+		'usa': {
+			type : plotType,
+			size : defaultSize,
+			latitude: 70,
+			longitude: 50,
+			tooltip: {content: "<span style=\"font-weight:bold;\">Zona :</span> U.S.A. <br /><span style=\"font-weight:bold;\">Risorsa 1 :</span> 50 <br /><span style=\"font-weight:bold;\">Risorsa 2 :</span> 30 <br />",
+						offset : {
+							left:25,
+							top: -5,
+
+						},
+						persistent:true,
+					 },
+			text : 'Usa'
 		}
 	},
 	/*
