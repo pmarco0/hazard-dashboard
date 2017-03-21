@@ -1,7 +1,7 @@
 "use strict";
 
 module.exports = {
-	italian : {
+	'it' : {
 		'restart' : 'Ricomincia',
 		'wait' : 'Attendi ...',
 		'loading' : 'Caricamento in Corso',
@@ -13,5 +13,6 @@ module.exports = {
 		'gamestartstext' : 'Inizia la Partita',
 		'gameovertext' : 'La malattia ha preso il sopravvento',
 		'gamestatus' : 'Status di Gioco',
+		'zone' : 'Zona: ',
 	},
 }

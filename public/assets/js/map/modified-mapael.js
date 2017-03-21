@@ -453,7 +453,7 @@
             self.$player.animate({
                 top : $end.top,
                 left: $end.left,
-            }, 2000, function(){
+            }, 3000, function(){
                 self.$player.css('display','none');
             });
         

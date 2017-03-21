@@ -175,8 +175,10 @@ $(".map-container").mapael({
 			text : 'Canada'
 		},
 		'usa': {
-			type : plotType,
-			size : defaultSize,
+		 	type: 'image',
+		 	url : './assets/img/icon.png',
+		 	width: 8,
+		 	height: 8,
 			latitude: 70,
 			longitude: 50,
 			tooltip: {content: "<span style=\"font-weight:bold;\">Zona :</span> U.S.A. <br /><span style=\"font-weight:bold;\">Risorsa 1 :</span> 50 <br /><span style=\"font-weight:bold;\">Risorsa 2 :</span> 30 <br />",

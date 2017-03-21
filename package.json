@@ -12,14 +12,12 @@
     "socket.io": "^1.7.2",
     "utf-8-validate": "^3.0.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "babel-cli": "^6.24.0",
+    "babel-preset-env": "^1.2.2"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "bundle": "browserify ./public/assets/js/init.js -o ./public/assets/compiled-js/bundle.js && minify --output ./public/assets/compiled-js/bundle.min.js ./public/assets/compiled-js/bundle.js",
-    "compile": "./run.sh",
-    "run": "node app.js",
-    "clean": "rm -rf ./release/dashboard",
-    "cleanrun": "npm run clean && npm run bundle && npm run run"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
