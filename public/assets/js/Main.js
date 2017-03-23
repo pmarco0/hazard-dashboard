@@ -9,6 +9,7 @@ var ModalDialog =require('./utils/ModalDialog.js');
 var Utils = require('./utils/Utils.js');
 var MapUtils = require('./utils/MapUtils.js');
 var Dashboard = require('./Dashboard.js');
+var ParserXML = require('./utils/ParserXML.js');
 
 /**
  * Classe principale dell'applicazione
@@ -27,6 +28,7 @@ class HazardDashboard {
 		var socket = io.connect();
 
 		socket.on('setProgress', function(data) {
+
 			self.hazard.setProgress(data.value);
 		});
 
@@ -34,12 +36,24 @@ class HazardDashboard {
 			self.hazard.setLevel(config['PROGRESS_BALL_STEP']);
 		});
 
+		socket.on('NextTurn',function(data){
+			self.hazard.updateTurn();
+		});
+
 		socket.on('decreaseLevel', function(data) {
 			self.hazard.setLevel(-config['PROGRESS_BALL_STEP']);
 		});
 
-		socket.on('chat', function(data){
+		socket.on('log', function(data){
 			self.hazard.addLog(data.type,data.message);
+		});
+
+		socket.on('init',function(data){
+			//socket.emit('initServer'); //DA RIVEDERE
+		});
+
+		socket.on('parsingXML',function(data){
+			self.parseXML();	// DA RIVEDERE
 		});
 
 		socket.on('gamestart', function(data){
@@ -76,7 +90,15 @@ class HazardDashboard {
 		this.hazard.showModal(lang['gameover'],lang['gameovertext'],'modal-danger');
 	}
 
-
+	/**
+	* Richiama il parser XML, inizializza la configurazione e la classe delle aree
+	*/
+	parseXML(file){
+		// Parsing
+		// Popola config
+		// es. config['MAX_LEVEL'] = ... quello che trovi dal file XML
+		// var parser = new ParserXML(file);
+	}
 }
 
 var main = new HazardDashboard();

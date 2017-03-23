@@ -165,7 +165,7 @@ class Dashboard {
 
 	/**
 	 * Mostra il modal, se è necessario modificarne il contenuto senza eliminarlo utilizzare updateModal(). Un solo modal alla volta è permesso.
-	 * TODO: Permettere la visualizzazione di un contenuto più significativo del semplice testo
+	 * TODO: Permettere la visualizzazione di un contenuto più significativo del semplice testo 
 	 * @param  {String} title   [Intestazione del modal]
 	 * @param  {String} content [Contenuto del modal]
 	 * @param  {String} clazz   [Classe css del modal, di default è utilizzato modal-primary]
@@ -193,6 +193,14 @@ class Dashboard {
 			},time);
 	}
 
+
+	/**
+	 * Blocca un collegamento (tratteggio)
+	 * @param {String} link [ID Univoco del collegamento]
+	 */
+	CloseLink(link){
+		this.map.UpdateMap({},{},{});
+	}
 
 }
 

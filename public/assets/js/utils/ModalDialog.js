@@ -30,9 +30,40 @@ class ModalDialog {
 		$(config['MODAL_TITLE_ID']).html(title)
 	}
 
+	/**
+	 * Imposto il contenuto del modal (Testo)
+	 *
+	 */
 	setContent(content){
 		$(config['MODAL_TEXT_ID']).html(content);
 	}
+
+	/**
+	 * Imposto il contenuto del modal (Carte)
+	 * @param {Object} cards [Oggetto contenente le carte]
+	 */
+	setContentCards(cards){
+		/*
+			var html;
+			html = <div>
+			for(carte){
+				html += '<img src="link da carte' id="nome-carta"+i/>';
+			}
+			html = </div>
+
+			$(config['MODA_TEXT_ID']).append(html);
+		*/
+	}
+
+	/**
+	 * Seleziono la carta scelta
+	 * @param {int} id [Carta selezionata]
+	 */
+	 selectCard(id){
+	 	/*
+			$('#nome-carta').anima();
+	 	*/
+	 }
 
 	show() {
 		$(config['MODAL_ID']).modal("show");

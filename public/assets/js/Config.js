@@ -31,6 +31,16 @@ module.exports = {
 	'MODAL_BUTTONS_ID' : '#modal-buttons',
 	'MODAL_CLASS' : 'modal-primary',
 
+	/*
+	'ESEMPIO_OGGETTO' : {
+		'variabile1' : valore1,
+		'variabile2' : valore2,
+	},
+
+	Accesso da esterno: config['ESEMPIO_OGGETTO'].variabile1
+
+	*/
+
 	//IDs
 	'PROGRESS_BAR_ID' : '#progressinf',
 	'PROGRESS_BALLS_ID' : '#progress',
