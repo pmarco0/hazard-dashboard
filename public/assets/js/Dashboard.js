@@ -55,7 +55,7 @@ class Dashboard {
 		 	tooltip : self.utils.__buildTooltip('Canada',vars),
 		 }
 	   this.map.UpdateMap(updatedOptions,{},{});
-	   //movePlayer('canada','usa');
+	   this.map.MovePlayer('canada','usa');
 	}
 
 	/**
@@ -197,9 +197,20 @@ class Dashboard {
 	/**
 	 * Blocca un collegamento (tratteggio)
 	 * @param {String} link [ID Univoco del collegamento]
+	 * @param {Boolean} enabled [True se il link è attraversabile, false altrimenti]
+	 * @param {Integer} time [Tempo in millisecondi prima che il link venga ricreato, default: 500]
 	 */
-	CloseLink(link){
-		this.map.UpdateMap({},{},{});
+	CloseLink(link,enabled=true,time = 500){
+		var linkedPlots = link.split('.');
+		var strokeStyle = enabled ? '-' : '--';
+		var self = this;
+
+		this.RemoveLink(link);
+
+		setTimeout(
+			function(){
+				this.AddLink(linkedPlots[0],linkedPlots[1],strokeStyle);
+			},time);
 	}
 
 }

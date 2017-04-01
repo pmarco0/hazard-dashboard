@@ -166,10 +166,7 @@ $(".map-container").mapael({
 			latitude: 70,
 			longitude: 30,
 			tooltip: {content: "<span style=\"font-weight:bold;\">Zona :</span> Canada <br /><span style=\"font-weight:bold;\">Risorsa 1 :</span> 50 <br /><span style=\"font-weight:bold;\">Risorsa 2 :</span> 30 <br />",
-						offset : {
-							left:25,
-							top: -5,
-						},
+
 						persistent:true,
 					 },
 			text : 'Canada'
@@ -177,16 +174,11 @@ $(".map-container").mapael({
 		'usa': {
 		 	type: 'image',
 		 	url : './assets/img/icon.png',
-		 	width: 8,
-		 	height: 8,
+		 	width: 6,
+		 	height: 6,
 			latitude: 70,
 			longitude: 50,
 			tooltip: {content: "<span style=\"font-weight:bold;\">Zona :</span> U.S.A. <br /><span style=\"font-weight:bold;\">Risorsa 1 :</span> 50 <br /><span style=\"font-weight:bold;\">Risorsa 2 :</span> 30 <br />",
-						offset : {
-							left:25,
-							top: -5,
-
-						},
 						persistent:true,
 					 },
 			text : 'Usa'

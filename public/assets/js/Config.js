@@ -21,8 +21,8 @@ module.exports = {
 	'DEFAULT_PLOT_STROKE' : 1,//Spessore linea di collegamento
 	'DEFAULT_PLOT_FACTOR' : -0.15,//Curvatura linea di collegamento [- verso l'alto, + verso il basso]
 	'DEFAULT_PLOT_ICON' : './assets/img/icon.png',
-	'DEFAULT_PLOT_ICON_WIDTH' : 8,
-	'DEFAULT_PLOT_ICON_HEIGHT' : 8,
+	'DEFAULT_PLOT_ICON_WIDTH' : 4,
+	'DEFAULT_PLOT_ICON_HEIGHT' : 4,
 
 	//Modal
 	'MODAL_ID' : '#myModal',

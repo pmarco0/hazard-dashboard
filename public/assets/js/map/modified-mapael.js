@@ -436,15 +436,15 @@
 
             self.$player = $('<img>').attr('src','./assets/img/icon.png');
             self.$player.css('position','absolute');
-
+            self.$player.css('z-index',9999);
             var $start = {
-                top : self.plots[opt.movementOptions.from].mapElem.displayedTooltip.offset().top,
-                left : self.plots[opt.movementOptions.from].mapElem.displayedTooltip.offset().left,
+                top : $(self.plots[opt.movementOptions.from].mapElem.node).position().top - self.$map.offset().top - self.$player[0].height/2,
+                left : $(self.plots[opt.movementOptions.from].mapElem.node).position().left - self.$map.offset().left - self.$player[0].width/2,
             };
 
             var $end = {
-                top : self.plots[opt.movementOptions.to].mapElem.displayedTooltip.offset().top,
-                left : self.plots[opt.movementOptions.to].mapElem.displayedTooltip.offset().left,
+                top : $(self.plots[opt.movementOptions.to].mapElem.node).position().top - self.$map.offset().top - self.$player[0].height/2,
+                left : $(self.plots[opt.movementOptions.to].mapElem.node).position().left - self.$map.offset().left - self.$player[0].width/2,
             };
             self.$player.css('left', $start.left);
             self.$player.css('top',$start.top);
@@ -453,7 +453,7 @@
             self.$player.animate({
                 top : $end.top,
                 left: $end.left,
-            }, 3000, function(){
+            }, 2000, function(){
                 self.$player.css('display','none');
             });
         
@@ -1460,15 +1460,17 @@
                 }
 
                 var tooltipPosition = {
-                    "left": Math.min(self.$map.width() - elem.displayedTooltip.outerWidth() - 5, x - self.$map.offset().left + offsetLeft),
-                    "top": Math.min(self.$map.height() - elem.displayedTooltip.outerHeight() - 5, y - self.$map.offset().top + offsetTop)
+                    //"left": Math.min(self.$map.width() - elem.displayedTooltip.outerWidth() - 5, x - self.$map.offset().left + offsetLeft),
+                    //"top": Math.min(self.$map.height() - elem.displayedTooltip.outerHeight() - 5, y - self.$map.offset().top + offsetTop)
+                    "left" : x - self.$map.offset().left + offsetLeft,
+                    "top": y - self.$map.offset().top + offsetTop,
                 };
 
                 if (typeof elem.tooltip.overflow === "object") {
                     if (elem.tooltip.overflow.right === true) {
                         tooltipPosition.left = x - self.$map.offset().left + 10;
                     }
-                    if (selem.tooltip.overflow.bottom === true) {
+                    if (elem.tooltip.overflow.bottom === true) {
                         tooltipPosition.top = y - self.$map.offset().top + 20;
                     }
                 }

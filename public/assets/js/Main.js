@@ -23,6 +23,11 @@ class HazardDashboard {
 	 * @return NA
 	 */
 	constructor() {
+		
+		String.prototype.capitalizeFirstLetter = function() {
+    		return this.charAt(0).toUpperCase() + this.slice(1).toLowerCase();
+		}
+
 		this.hazard = new Dashboard();
 		var self = this;
 		var socket = io.connect();

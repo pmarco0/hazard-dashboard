@@ -31,6 +31,46 @@ class MapUtils {
     	}]);
 	}
 
+
+	/**
+	 * Elimina un collegamento identificato da *link*
+	 * @param {String} link     [ID Univoco del collegamento da eliminare]
+	 * @param {Number} duration [Durata dell'animazione in ms, default: 500]
+	 */
+	RemoveLink(link, duration = 500){
+		var self = this;
+		$(config['MAP_CONTAINER']).trigger('update'[{
+			deleteLinkKeys : self.link,
+			animDuration : self.duration,
+		}]);
+
+	}
+
+	/**
+	 * Aggiunge un collegamento da *from* a *to* con stile *style*
+	 * @param {String} from  [ID Univoco del plot di partenza]
+	 * @param {String} to    [ID Univoco del plot di arrivo]
+	 * @param {String} style [Attributo stroke-dasharray @https://www.vincentbroute.fr/mapael/raphael-js-documentation/index.html#Element.attr]
+	 * @param {Integer} duration [Durata dell'animazione in ms, default: 500]
+	 */
+	AddLink(from,to,style,duration = 500){
+		var self = this;
+		$(config['MAP_CONTAINER']).trigger('update'[{
+			newLinks : {
+				link : {
+					factor : config['DEFAULT_PLOT_FACTOR'],
+					between : [self.from,self.to],
+					attrs : {
+						'stroke-width': config['DEFAULT_PLOT_STROKE'],
+						'stroke-dasharray' : self.style
+					},
+				},
+			},
+			animDuration : self.duration,
+		}]);
+	}
+
+
 	/**
 	 * Triggera l'evento "playermove" per spostare l'icona dell'utente da fromv a tov
 	 * @param {String} fromv [ID univoco del plot relativo all'area di partenza (Plot)]
@@ -60,7 +100,7 @@ class MapUtils {
 		 	type: config['DEFAULT_PLOT_TYPE'],
 		 	size : config['DEFAULT_PLOT_SIZE'],
 		}
-		this.updateMap(updatedOptions);
+		this.UpdateMap(updatedOptions);
 	}
 
 	/**
@@ -76,7 +116,7 @@ class MapUtils {
 		 	width: config['DEFAULT_PLOT_ICON_WIDTH'],
 		 	height: config['DEFAULT_PLOT_ICON_HEIGHT'],
 		 }
-		 this.updateMap(updatedOptions);
+		 this.UpdateMap(updatedOptions);
 	}
 }
 
