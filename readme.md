@@ -2,7 +2,7 @@
 - Installa NodeJs https://nodejs.org/dist/v7.5.0/node-v7.5.0-x64.msi
 - Da linea di comando installa browserify, babel e babili
 - 'npm install -g --save-dev browserify'
-- 'npm install -g --save-dev babel'
+- 'npm install -g --save-dev babel-cli'
 - 'npm install -g --save-dev babili'
 - Installa le dipendenze: 'npm install'
 - Avvia windows.bat

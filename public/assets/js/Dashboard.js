@@ -24,7 +24,6 @@ class Dashboard {
 				$(config['PROGRESS_BALLS_ID']).append('<li id="layer'+(i+1)+'" class="ball"></li>');
 			}
 			self.showModal(lang['gamestart'],lang['oktostart']);
-
 		});
 	}
 
@@ -34,6 +33,8 @@ class Dashboard {
 	testBasic () {
 		this.setProgress(30);
 		this.setLevel(+1);
+		this.changeResources('gatti',100);
+		this.updateTurn('Mario');
 	}
 	test() {
 	   var self = this;
@@ -123,10 +124,10 @@ class Dashboard {
 	 */
     changeResources(resource,quantity){
     	var item = $(config['RESOURCES_LOCATION']).find('#'+resource);
-    	if(item) {
+    	if(item.length) {
     		item.html(quantity);
     	}else {
-    		$(config['RESOURCES_LOCATION']).append('<li><i class="'+config['RESOUCES_ICON']+'" id="${resource}" aria-hidden="true"></i>${quantity}</li>');
+    		$(config['RESOURCES_LOCATION']).append('<li><i class="'+config['RESOURCES_ICON']+'" id="'+resource+'" aria-hidden="true" title="'+resource.capitalizeFirstLetter()+'"></i>'+resource.capitalizeFirstLetter()+' : '+quantity+'</li>');
     	}
     }
 
@@ -179,7 +180,7 @@ class Dashboard {
 		$(config['TURN_LOCATION']).attr('turn',turn);
 		$(config['TURN_LOCATION']).html(lang['turn']+" "+turn);
 		this.addLog('INFO',lang['turn_start'] +' '+turn)
-		if(who) $('#whosplaying').html(who);
+		if(who) $(config['TURN_GROUP_LOCATION']).html(who);
 	}
 
 	/**

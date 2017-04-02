@@ -74,7 +74,7 @@ class HazardDashboard {
 		this.hazard.hideModal(3000);
 		this.hazard.updateTurn();
 		this.hazard.addLog('INFO',lang['gamestartstext']);
-		this.hazard.test();
+		this.hazard.testBasic();
 	}
 
 	/**
