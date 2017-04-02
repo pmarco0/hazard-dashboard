@@ -114,11 +114,29 @@ class Dashboard {
 		}
 	}
 
+
+	/**
+	 * Modifica le risorse visualizzate per l'area corrente
+	 * @param  {String} resource [Identificatore univoco della risorsa]
+	 * @param  {String} quantity [Quantità della risorsa]
+	 * @return NA       
+	 */
+    changeResources(resource,quantity){
+    	var item = $(config['RESOURCES_LOCATION']).find('#'+resource);
+    	if(item) {
+    		item.html(quantity);
+    	}else {
+    		$(config['RESOURCES_LOCATION']).append('<li><i class="'+config['RESOUCES_ICON']+'" id="${resource}" aria-hidden="true"></i>${quantity}</li>');
+    	}
+    }
+
+
 	/**
 	 * Scrive un log
 	 * @param {String} type [Tipo di messaggio da mostrare, uno tra {DANGER, INFO, WARNING}]
 	 * @param {String} text [Testo del messaggio da mostrare]
 	 */
+	
 	addLog(type,text){
 		var d = new Date();
 		var time = d.getHours() + ":" + d.getMinutes();
@@ -152,15 +170,16 @@ class Dashboard {
 
 	/**
 	 * Passa al turno successivo, aumenta il numero visualizzato
-	 * TODO: Mostrare chi sta giocando?
+	 * @param {String} [who] [Nome del gruppo]
 	 * @return NA
 	 */
-	updateTurn() {
+	updateTurn(who = null) {
 		var turn = parseInt($(config['TURN_LOCATION']).attr('turn'));
 		turn=turn+1;
 		$(config['TURN_LOCATION']).attr('turn',turn);
 		$(config['TURN_LOCATION']).html(lang['turn']+" "+turn);
 		this.addLog('INFO',lang['turn_start'] +' '+turn)
+		if(who) $('#whosplaying').html(who);
 	}
 
 	/**

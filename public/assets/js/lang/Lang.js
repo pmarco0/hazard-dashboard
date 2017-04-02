@@ -14,5 +14,14 @@ module.exports = {
 		'gameovertext' : 'La malattia ha preso il sopravvento',
 		'gamestatus' : 'Status di Gioco',
 		'zone' : 'Zona: ',
+
+		//Gruppi
+		'productionGroup' : 'Gruppo Produzione',
+		'eventGroup' : 'Gruppo Evento',
+		'emergencyGroup' : 'Gruppo Emergenza',
+		'actionGroup' : 'Gruppo Azione',
+
+		//Turni
+		'currentlyPlaying' : 'Inizia il turno del ',
 	},
 }

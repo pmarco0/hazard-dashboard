@@ -47,7 +47,9 @@ module.exports = {
 	'LOG_AREA_ID' : '#log-area',
 	'MAP_CONTAINER': '.map-container',
 	'TURN_LOCATION' : '#turnTitle',
+	'RESOURCES_LOCATION' : '#resources-left',
 
 	//Altro
 	'PROGRESS_BALLS_STEP' : 1,
+	'RESOURCE_ICON' : 'tint',
 }

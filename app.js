@@ -12,7 +12,7 @@ app.get('/', function (req, res) {
 });
 
 app.post('/start',function(req,res){
-	io.emit('gamestart');
+	io.emit('init');
 });
 
 server.listen(3000);
