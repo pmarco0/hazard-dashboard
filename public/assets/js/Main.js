@@ -9,7 +9,7 @@ var ModalDialog =require('./utils/ModalDialog.js');
 var Utils = require('./utils/Utils.js');
 var MapUtils = require('./utils/MapUtils.js');
 var Dashboard = require('./Dashboard.js');
-var ParserXML = require('./utils/ParserXML.js');
+var ParserXML = require('./lib/xml2json.min.js');
 var GameState = require('./utils/GameState.js');
 
 /**
@@ -29,7 +29,21 @@ class HazardDashboard {
     		return this.charAt(0).toUpperCase() + this.slice(1).toLowerCase();
 		}
 
+		// Inizializzazione variabili di gioco
+		this.cards = {};
+		this.emergencies = {};
+		this.endGame = {};
+        this.groups = {};
+		this.locale = {};
+		this.locations = {}; 
+		this.resources = {};
+		this.setup = {};
+		this.strongholdinfos = {};
+		this.turns = {};
+
+
 		this.hazard = new Dashboard();
+		this.parsing = new ParserXML();
 		this.gameState = GameState;
 		var self = this;
 		var socket = io.connect();
@@ -40,11 +54,11 @@ class HazardDashboard {
 		});
 
         socket.on('popupMessage',function(data){
-		
+			
 		});
 
         socket.on('closePopup',function(data){
-		
+			self.hazard.hideModal();
 		});
 
         socket.on('chooseProductionCard',function(data){
@@ -74,7 +88,7 @@ class HazardDashboard {
 		this.hazard.hideModal(3000);
 		this.hazard.updateTurn();
 		this.hazard.addLog('INFO',lang['gamestartstext']);
-		this.hazard.testBasic();
+		this.parseXML();
 	}
 
 	/**
@@ -85,6 +99,49 @@ class HazardDashboard {
 		this.hazard.addLog('DANGER',lang['gameover']);
 		this.hazard.showModal(lang['gameover'],lang['gameovertext'],'modal-danger');
 	}
+
+
+	/**
+	 * Esegue il parsing del file XML di configurazione
+	 * @return {[type]} [description]
+	 */
+	parseXML(path){
+		var self = this;
+		// Load the xml file using ajax 
+		$.ajax({
+			type: "GET",
+			url: path,
+			dataType: "text",
+			success: self.__parseJson,
+			error: function (exception) {
+				console.log('Exeption:'+exception);
+			}
+		});
+	}
+
+
+    __parseJson(xml){
+		// Parsing
+		var json = this.parsing.xml_str2json( xml )
+		console.log(json);
+		
+		//ciclo le l'xml di setup gioco
+		this.cards = json.xml.game.cards;					
+		this.emergencies = json.xml.game.emergencies;					
+		this.endGame = json.xml.game.endGame;					
+		this.groups = json.xml.game.groups;
+		this.locale = json.xml.game.locale
+		this.locations = json.xml.game.map.area.location;
+		for(var j = 0; j < this.locations.length; j++)	{
+			this.utils.__buildTooltip(this.locations[j].name, []); //CREAZIONE TOOLTIPS
+		}
+		this.resources = json.xml.game.resources;
+		this.setup = json.xml.game.setup;
+		this.strongholdinfos = json.xml.game.strongholdinfos;
+		this.turns = json.xml.game.turns;
+    }
+
+
 
 	handleState(data) {
 
@@ -182,16 +239,6 @@ class HazardDashboard {
 
 	}
 
-
-	/**
-	* Richiama il parser XML, inizializza la configurazione e la classe delle aree
-	*/
-	parseXML(file){
-		// Parsing
-		// Popola config
-		// es. config['MAX_LEVEL'] = ... quello che trovi dal file XML
-		// var parser = new ParserXML(file);
-	}
 }
 
 var main = new HazardDashboard();
