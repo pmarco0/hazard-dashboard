@@ -29,6 +29,10 @@ class HazardDashboard {
     		return this.charAt(0).toUpperCase() + this.slice(1).toLowerCase();
 		}
 
+		Number.prototype.between = function(a,b){
+    		return (a < b ? this[0] >= a && this[0] <= b : this[0] >= b && this[0] <= a);
+		}
+
 
 		this.areas = {};
 		this.plots = {};
