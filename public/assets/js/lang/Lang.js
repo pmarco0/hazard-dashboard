@@ -23,5 +23,7 @@ module.exports = {
 
 		//Turni
 		'currentlyPlaying' : 'Inizia il turno del ',
+
+		'legendTitle' : 'Livello Infezione',
 	},
 }

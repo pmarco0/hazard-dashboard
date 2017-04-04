@@ -59,6 +59,20 @@ class Dashboard {
 	   this.map.MovePlayer('canada','usa');
 	}
 
+
+	/**
+	 * Aggiorna il tooltip in caso di eliminazione o modifica di una emergenza
+	 * @param  {String} area      [ID Univoco dell'area]
+	 * @param  {Object} emergency [Emergenze dell'area]
+	 * @return {NA}
+	 */
+	updateEmergenciesTooltip(area,emergency){
+		var updatedOptions = {'areas' : {}};
+		updatedOptions.areas[area].tooltip = this.utils.__buildTooltip(area,emergency);
+		this.map.UpdateMap(updatedOptions,{},{});
+	}
+
+
 	/**
 	 * Imposta il valore della progress bar
 	 * @param {int} value "Valore della progress bar [0-100]"

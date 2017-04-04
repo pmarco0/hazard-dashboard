@@ -15,12 +15,35 @@ class Utils {
 	 */
 	__buildTooltip(name,vars){
 		var content_text = '<span style=\"font-weight:bold;\">'+lang['zone']+'</span>' + name+'<br/>';
+
 		for(var key in vars){
-			content_text += '<span style=\"font-weight:bold;\">'+key+' :</span> '+vars[key]+'<br />';
+			if(vars[key] == -1) continue;
+			var i = this.getMinMaxByValue(vars[key]);
+			content_text += '<span style=\"font-weight:bold;\">'+key+' :</span><div style="width:1px;height:1px;background-color:'+config['LEGEND_COLOR'][i]+'"></div><br />';
 		}
-		var tooltip = {content: content_text}
-		return tooltip;
+		//var tooltip = {content: content_text}
+		return content_text;
 	}
+
+	getMinMaxByValue(value){
+
+		if(typeof(value) != 'number'){
+			value = parseInt(value);
+		}
+
+		for(var i=0;i<config['LEGEND'];i++){
+			if(value.inRange(this.getValues(config['LEGEND'][0]),this.getValues(config['LEGEND'][1]))) return i;
+		}
+	}
+
+	getValues(value){
+		return value.split(',');
+	}
+
+
+
 }
 
 module.exports = Utils;
+
+

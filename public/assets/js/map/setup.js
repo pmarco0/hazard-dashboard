@@ -114,8 +114,7 @@ $(".map-container").mapael({
 			
 		},		
 		"America7": { //Sud America Argentina,Uruguay, ...
-			value:1,
-			
+			value:1,	
 		},
 
 	},

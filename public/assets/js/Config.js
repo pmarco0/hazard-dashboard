@@ -31,15 +31,20 @@ module.exports = {
 	'MODAL_BUTTONS_ID' : '#modal-buttons',
 	'MODAL_CLASS' : 'modal-primary',
 
-	/*
-	'ESEMPIO_OGGETTO' : {
-		'variabile1' : valore1,
-		'variabile2' : valore2,
-	},
+	//LEGENDA
+	'LEGEND_MODE' : 'horizontal',
+	'LEGEND' : [
+		{color : "#5BCA09", value : '0,1', text:'Livello 1'},
+		{color : "#B5EC03", value : '2,3', text:'Livello 2'},
+		{color : "#FF9C01", value : '2,3', text:'Livello 3'},
+		{color : "#FE2701", value : '6,20', text:'Livello 4'},
 
-	Accesso da esterno: config['ESEMPIO_OGGETTO'].variabile1
-
-	*/
+	],
+	'LEGEND_COLORS' : ["#5BCA09","#B5EC03","#FF9C01","#FE2701"],
+	'LEGEND_MINMAX' : [{min:0,max:1},
+						{min:2,max:3},
+						{min:4,max:5},
+						{min:6,max:20}],
 
 	//IDs
 	'PROGRESS_BAR_ID' : '#progressinf',
@@ -53,4 +58,5 @@ module.exports = {
 	//Altro
 	'PROGRESS_BALLS_STEP' : 1,
 	'RESOURCES_ICON' : 'fa fa-tint',
+
 }

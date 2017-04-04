@@ -29,9 +29,12 @@ class HazardDashboard {
     		return this.charAt(0).toUpperCase() + this.slice(1).toLowerCase();
 		}
 
+
+		this.areas = {};
+		this.plots = {};
+		this.links = {};
 		// Inizializzazione variabili di gioco
 		this.cards = {};
-		this.emergencies = {};
 		this.endGame = {};
         this.groups = {};
 		this.locale = {};
@@ -45,6 +48,8 @@ class HazardDashboard {
 		this.hazard = new Dashboard();
 		this.parsing = new ParserXML();
 		this.gameState = GameState;
+		this.utils = new Utils();
+
 		var self = this;
 		var socket = io.connect();
 
@@ -73,10 +78,12 @@ class HazardDashboard {
 			self.parseXML();	// DA RIVEDERE
 		});
 
-
 		socket.on('connection_error', function(){
 			console.log("Waiting for connection ...");
 		});
+
+
+		socket.emit('init_dashboard');
 
 	}
 
@@ -103,16 +110,65 @@ class HazardDashboard {
 
 	/**
 	 * Esegue il parsing del file XML di configurazione
-	 * @return {[type]} [description]
+	 * @return {NA}
 	 */
 	parseXML(path){
 		var self = this;
 		// Load the xml file using ajax 
 		$.ajax({
 			type: "GET",
-			url: path,
+			url: 'test.xml',
 			dataType: "text",
-			success: self.__parseJson,
+			success: function(xml){
+		// Parsing
+		var json = self.parsing.xml_str2json( xml )
+		console.log(json);
+		
+		//ciclo le l'xml di setup gioco
+		self.cards = json.xml.game.cards;					
+
+		self.endGame = json.xml.game.endGame;					
+		self.groups = json.xml.game.groups;
+		self.locale = json.xml.game.locale
+		self.locations = json.xml.game.map.area.location;
+		for(var j = 0; j < self.locations.length; j++) {
+			   self.areas[self.locations[j].name] = {};
+			    self.areas[self.locations[j].name].emergencies = {};
+			   self.areas[self.locations[j].name].value = 1;
+
+			   self.plots[self.locations[j].name+'-plot'] = {};
+			   self.plots[self.locations[j].name+'-plot'].type = config['DEFAULT_PLOT_TYPE'];
+			   self.plots[self.locations[j].name+'-plot'].size = config['DEFAULT_PLOT_SIZE'];
+			   self.plots[self.locations[j].name+'-plot'].latitude = self.locations[j].latitude;
+			   self.plots[self.locations[j].name+'-plot'].longitude = self.locations[j].longitude;
+
+			   for(var em in json.xml.game.emergencies.emergency) self.createEmergency(self.locations[j].name,em.name,0);
+
+			   self.plots[self.locations[j].name+'-plot'].tooltip = {};
+			   self.plots[self.locations[j].name+'-plot'].tooltip.content = self.utils.__buildTooltip(self.locations[j].name, self.locations[j].emergencies); //CREAZIONE TOOLTIPS
+			   self.plots[self.locations[j].name+'-plot'].tooltip.persistent = true;
+			   self.plots[self.locations[j].name+'-plot'].text = self.locations[j].name;
+
+	   		 for(var i = 0; i<self.locations[j].neighborhood.neighbor.length;i++){
+		       var neigh = self.locations[j].neighborhood.neighbor[i];
+		       var link = (neigh < self.locations[j].name) ? neigh+'-'+ self.locations[j].name : self.locations[j].name+'-'+neigh;
+		       if( typeof(self.links[link]) == 'undefined') {
+		       	self.links[link] = {};
+		        self.links[link].factor = config['DEFAULT_PLOT_FACTOR'];
+		        self.links[link].between = [link.split('-')[0]+'-plot',link.split('-')[1]+'-plot'];
+		        self.links[link].attrs = {};
+		        self.links[link].attrs['default-stroke'] = config['DEFAULT_PLOT_STROKE'];
+				}
+				self.resources = json.xml.game.resources;
+				self.setup = json.xml.game.setup;
+				self.strongholdinfos = json.xml.game.strongholdinfos;
+				self.turns = json.xml.game.turns;
+			}
+  		}
+
+
+
+			},
 			error: function (exception) {
 				console.log('Exeption:'+exception);
 			}
@@ -120,27 +176,61 @@ class HazardDashboard {
 	}
 
 
-    __parseJson(xml){
+    /*__parseJson(xml){
 		// Parsing
 		var json = this.parsing.xml_str2json( xml )
 		console.log(json);
 		
 		//ciclo le l'xml di setup gioco
 		this.cards = json.xml.game.cards;					
-		this.emergencies = json.xml.game.emergencies;					
+
 		this.endGame = json.xml.game.endGame;					
 		this.groups = json.xml.game.groups;
 		this.locale = json.xml.game.locale
 		this.locations = json.xml.game.map.area.location;
-		for(var j = 0; j < this.locations.length; j++)	{
-			this.utils.__buildTooltip(this.locations[j].name, []); //CREAZIONE TOOLTIPS
+		for(var j = 0; j < this.locations.length; j++) {
+			   this.areas[this.locations[j].name].value = 1;
+			   this.plots[this.locations[j].name+'-plot'].type = config['DEFAULT_PLOT_TYPE'];
+			   this.plots[this.locations[j].name+'-plot'].size = config['DEFAULT_PLOT_SIZE'];
+			   this.plots[this.locations[j].name+'-plot'].latitude = this.locations[j].latitude;
+			   this.plots[this.locations[j].name+'-plot'].longitude = this.locations[j].longitude;
+
+			   for(var em in json.xml.game.emergencies.emergency) createEmergency(this.locations[j].name,em.name,0);
+
+			   this.plots[this.locations[j].name+'-plot'].tooltip.content = this.utils.__buildTooltip(this.locations[j].name, this.locations[j].emergencies); //CREAZIONE TOOLTIPS
+			   this.plots[this.locations[j].name+'-plot'].tooltip.persistent = true;
+			   this.plots[this.locations[j].name+'-plot'].tooltip.text = this.locations[j].name;
+  		}
+
+		 for(var i = 0; i<this.locations[j].neighborhood;i++){
+		       var neigh = this.locations[j].neighborhood[i];
+		       var link = (neigh < this.locations[j].name) ? neigh+'-'+ this.locations[j].name : this.locations[j].name+'-'+neigh;
+		       if( typeof(this.links[link]) == 'undefined') {
+		        this.links[link].factor = config['DEFAULT_PLOT_FACTOR'];
+		        this.links[link].between = [link.split('-')[0]+'-plot',link.split('-')[1]+'-plot'];
+		        this.links[link].attrs['default-stroke'] = config['DEFAULT_PLOT_STROKE'];
+				}
+				this.resources = json.xml.game.resources;
+				this.setup = json.xml.game.setup;
+				this.strongholdinfos = json.xml.game.strongholdinfos;
+				this.turns = json.xml.game.turns;
 		}
-		this.resources = json.xml.game.resources;
-		this.setup = json.xml.game.setup;
-		this.strongholdinfos = json.xml.game.strongholdinfos;
-		this.turns = json.xml.game.turns;
+	}*/
+
+    createEmergency(locationID,emergency,level){
+    	this.areas[locationID].emergencies[emergency] =  level;
+    	//this.hazard.updateEmergenciesTooltip(locationID,this.area[locationID].emergencies,level)
     }
 
+    eliminateEmergency(locationID,area) {
+    	this.areas[locationID].emergencies[emergency] = -1;
+    	this.hazard.updateEmergenciesTooltip(locationID,this.area[locationID].emergencies)
+    }
+
+    modificateEmergency(locationID,emergency,level){
+    	this.areas[locationID].emergencies[emergency] = level;
+    	this.hazard.updateEmergenciesTooltip(locationID,this.area[locationID].emergencies)
+    }
 
 
 	handleState(data) {
@@ -169,15 +259,15 @@ class HazardDashboard {
 	                for (var k = 0; k < loc[j].emergencyLevels.length; k++) {
 	                    if (loc[j].emergencyLevels[k].level == 1) {
 	                        /*Crea una nuova malattia nella nazione tramite createEmergency(LOCATIONID,NOMEEMERGENZA,LIVELLOEMERGENZA) */
-	                        createEmergency(loc[j].locationID, loc[j].emergencyLevels[k].emergency, loc[j].emergencyLevels[k].level);
+	                        this.createEmergency(loc[j].locationID, loc[j].emergencyLevels[k].emergency, loc[j].emergencyLevels[k].level);
 	                        this.hazard.addLog("INFO", logString);
 	                    } else if (loc[j].emergencyLevels[k].level == 0) {
 	                        /*La malattia è stata curata, quindi va eliminata dalla mappa tramite eliminateEmergency(LOCATIONID,NOMEEMERGENZA) */
-	                        eliminateEmergency(loc[j].locationID, loc[j].emergencyLevels[k].emergency);
+	                        this.eliminateEmergency(loc[j].locationID, loc[j].emergencyLevels[k].emergency);
 	                        this.hazard.addLog("INFO", logString);
 	                    } else {
 	                        /*Il livello malattia è stato modificato tramite modificateEmergencyLevel(LOCATIONID,NOMEEMERGENZA,LIVELLOEMERGENZA) */
-	                        modificateEmergencyLevel(loc[j].locationID, loc[j].emergencyLevels[k].emergency, loc[j].emergencyLevels[k].level);
+	                        this.modificateEmergencyLevel(loc[j].locationID, loc[j].emergencyLevels[k].emergency, loc[j].emergencyLevels[k].level);
 	                        this.hazard.addLog("INFO", logString);
 	                    }
 	                }

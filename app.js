@@ -15,5 +15,9 @@ app.post('/start',function(req,res){
 	io.emit('init');
 });
 
+app.post('/xml',function(req,res){
+	io.emit('parsingXML');
+});
+
 server.listen(3000);
 io.listen(server);
