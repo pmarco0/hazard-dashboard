@@ -3,7 +3,7 @@ var config = require('../Config.js');
 var lang = l[config['LANGUAGE']];
 
 /**
- * Finestra modale
+ * @class [Finestra Modale]
  */
 class ModalDialog {
 	constructor(){
@@ -32,7 +32,7 @@ class ModalDialog {
 
 	/**
 	 * Imposto il contenuto del modal (Testo)
-	 *
+	 * @param {String} content [Testo da visualizzare]
 	 */
 	setContent(content){
 		$(config['MODAL_TEXT_ID']).html(content);
@@ -43,16 +43,16 @@ class ModalDialog {
 	 * @param {Object} cards [Oggetto contenente le carte]
 	 */
 	setContentCards(cards){
-		/*
-			var html;
-			html = <div>
-			for(carte){
-				html += '<img src="link da carte' id="nome-carta"+i/>';
-			}
-			html = </div>
-
-			$(config['MODA_TEXT_ID']).append(html);
-		*/
+		this.cards = cards;
+		var html = `<div class="row">`;
+		var cols = Math.floor(12/cards.length);
+		for(card in cards){
+			html += `<div class="col-md-${cols} col-xl-${cols}">`;
+			html += `<img src="${card.src}" id="${card.name}"/>`;
+			html += `</div>`;
+		}
+		html += '</div>';
+		this.setContent(html);
 	}
 
 	/**
@@ -60,9 +60,12 @@ class ModalDialog {
 	 * @param {int} id [Carta selezionata]
 	 */
 	 selectCard(id){
-	 	/*
-			$('#nome-carta').anima();
-	 	*/
+		for(card in cards){
+			if(card.name != id){
+				$(card.name).addClass('animate zoomOut');
+			}
+		}
+		$(id).addClass('animate pulse');
 	 }
 
 	show() {
@@ -75,6 +78,10 @@ class ModalDialog {
 		this.visible = false;
 	}
 
+	/**
+	 * @private
+	 * @return {Boolean} [True se è visibile il popup, falso altrimenti]
+	 */
 	isVisible(){
 		return this.visible;
 	}

@@ -15,6 +15,8 @@ class GameState {
 	 * @param {Object} newState [Nu]
 	 */
 	setState(newState){
+		if(typeof(newState) != 'object' || newState == null || newState.gameState == null) throw new Error('Invalid state, ignoring update');
+
 		if(this.initialized){
 			var diffs = this.__getDifferences(newState);
 		} else {
@@ -26,7 +28,12 @@ class GameState {
 
 	}
 
-
+	/**
+	 * Utilizza la libreria deep-diff per cercare le differenze tra due stati
+	 * @private method
+	 * @param  {Object} newState [Stato da confrontare con l'ultimo stato salvato]
+	 * @return {Object}          [Differenze ottenute da deep-diff]
+	 */
 	__getDifferences(newState){
 		return diff(newState,this.state)
 	}

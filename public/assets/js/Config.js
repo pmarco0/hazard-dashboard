@@ -40,11 +40,6 @@ module.exports = {
 		{color : "#FE2701", value : '6,20', text:'Livello 4'},
 
 	],
-	'LEGEND_COLORS' : ["#5BCA09","#B5EC03","#FF9C01","#FE2701"],
-	'LEGEND_MINMAX' : [{min:0,max:1},
-						{min:2,max:3},
-						{min:4,max:5},
-						{min:6,max:20}],
 
 	//IDs
 	'PROGRESS_BAR_ID' : '#progressinf',

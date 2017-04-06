@@ -1,3 +1,4 @@
+window.$ = window.jQuery   = require('jquery');
 var l = require('./lang/Lang.js');
 var config = require('./Config.js');
 var lang = l[config['LANGUAGE']];
@@ -17,14 +18,6 @@ class Dashboard {
 		this.modal = new ModalDialog();
 		this.map = new MapUtils();
 		this.utils = new Utils();
-		var self = this;
-
-		$(document).ready(function() {
-			for(var i = 0; i<config['MAX_LEVEL'];i++){
-				$(config['PROGRESS_BALLS_ID']).append('<li id="layer'+(i+1)+'" class="ball"></li>');
-			}
-			self.showModal(lang['gamestart'],lang['oktostart']);
-		});
 	}
 
 
@@ -59,6 +52,20 @@ class Dashboard {
 	   this.map.MovePlayer('canada','usa');
 	}
 
+	/**
+	 * [initDashboard description]
+	 * @return {NA} 
+	 */
+	initDashboard(){
+		var self = this;
+		//$(document).ready(function() {
+		document.addEventListener("DOMContentLoaded", function(event) { 
+			for(var i = 0; i<config['MAX_LEVEL'];i++){
+				$(config['PROGRESS_BALLS_ID']).append('<li id="layer'+(i+1)+'" class="ball"></li>');
+			}
+			self.showModal(lang['gamestart'],lang['oktostart']);
+		});
+	}
 
 	/**
 	 * Aggiorna il tooltip in caso di eliminazione o modifica di una emergenza
@@ -70,6 +77,12 @@ class Dashboard {
 		var updatedOptions = {'areas' : {}};
 		updatedOptions.areas[area].tooltip = this.utils.__buildTooltip(area,emergency);
 		this.map.UpdateMap(updatedOptions,{},{});
+	}
+
+
+	chooseCardPopup(cardID){
+		this.modal.selectCard(cardID);
+		this.hideModal(3000);
 	}
 
 
