@@ -55,9 +55,16 @@ var GameState = require('./utils/GameState.js');
 		this.utils = new Utils();
 
 		var self = this;
-		var socket = io.connect();
+		//var socket = io.connect();
+		var socket = io();
 
 		
+			socket.on('welcome',function(data){
+				console.log(data);
+				socket.emit('init_dashboard', data);
+				self.hazard.initDashboard();
+			});
+
 			socket.on('update',function(data){
 				if(typeof(data) != `undefined`) self.handleState(data);
 			});
@@ -86,9 +93,6 @@ var GameState = require('./utils/GameState.js');
 				console.log("Waiting for connection ...");
 			});
 
-
-			socket.emit('init_dashboard');
-		this.hazard.initDashboard();
 
 	}
 
