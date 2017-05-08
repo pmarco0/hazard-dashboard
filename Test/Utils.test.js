@@ -1,14 +1,19 @@
 let chai = require('chai'),
 path = require('path');
 chai.should();
-global.$ = require('jquery')(window);
+var jsdom = require('mocha-jsdom');
 global.config = require('../public/assets/js/Config.js');
 global.l = require('../public/assets/js/lang/Lang.js');
 let Utils = require('../public/assets/js/utils/Utils.js');
 var lang = l[config['LANGUAGE']];
 describe('Utils.js',() => {
+	jsdom();
+	var $;
 	describe('functions', () => {
 		let utils;
+		before(()=> {
+			$ = require('jquery');
+		});
 		beforeEach(()=>{
 			utils = new Utils();
 			Number.prototype.inRange = function(a,b){

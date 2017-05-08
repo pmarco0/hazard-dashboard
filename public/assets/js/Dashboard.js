@@ -58,12 +58,71 @@ class Dashboard {
 	 */
 	initDashboard(){
 		var self = this;
-		//$(document).ready(function() {
-		document.addEventListener("DOMContentLoaded", function(event) { 
+		$(document).ready(function() {
+		//document.addEventListener("DOMContentLoaded", function(event) { 
 			for(var i = 0; i<config['MAX_LEVEL'];i++){
 				$(config['PROGRESS_BALLS_ID']).append('<li id="layer'+(i+1)+'" class="ball"></li>');
 			}
-			self.showModal(lang['gamestart'],lang['oktostart']);
+			//self.showModal(lang['gamestart'],lang['oktostart']);
+		});
+	}
+
+
+	initMap(a,p,l) {
+		var self = this;
+		$(".map-container").mapael({
+		map: {
+			name: "hazard_map",
+			defaultArea : {
+				attrs: {
+					stroke: "#7C7C7C",
+					"stroke-width": 0.2
+				}
+			}
+		},
+		//QUI DEFINISCO I COLORI DELLE AREE
+		areas : a ,
+		legend : {
+			area: {
+				display: true,
+				title: "Livello Infezione",
+				mode: "horizontal",
+				slices: [
+		            {
+		                max: 1,
+		                attrs: {
+		                    fill: "#5BCA09"
+		                },
+		                label: "Livello 1"
+		            },
+		            {
+		                min: 2,
+		                max: 3,
+		                attrs: {
+		                    fill: "#B5EC03"
+		                },
+		                label: "Livello 2"
+		            },
+		            {
+		                min: 4,
+		                max: 5,
+		                attrs: {
+		                    fill: "#FF9C01"
+		                },
+		                label: "Livello 3"
+		            },
+		            {
+		                min: 6,
+		                attrs: {
+		                    fill: "#FE2701"
+		                },
+		                label: "Livello 4"
+		            }
+				]
+			}
+		},
+		//QUI DEFINISCO LE CITTA'
+		plots : p,
 		});
 	}
 

@@ -15,6 +15,9 @@ module.exports = {
 	'DEFAULT_AREA_STROKE' : "#7C7C7C", //Colore confini
 	'DEFAULT_AREA_STROKE_WIDTH' : 0.2, //Spessore confini
 
+	'MAP_H' : 180,  //Da spostare nel file XML
+	'MAP_W' : 360,
+
 	//Mappa - Plot
 	'DEFAULT_PLOT_SIZE' : 3, //Dimensione indicatore città
 	'DEFAULT_PLOT_TYPE' : "rounded", //Tipo indicatore città

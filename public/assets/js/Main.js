@@ -57,37 +57,37 @@ var GameState = require('./utils/GameState.js');
 		var self = this;
 		var socket = io.connect();
 
+		
+			socket.on('update',function(data){
+				if(typeof(data) != `undefined`) self.handleState(data);
+			});
 
-		socket.on('update',function(data){
-			if(typeof(data) != `undefined`) self.handleState(data);
-		});
+			socket.on('popupMessage',function(data){
+				
+			});
 
-		socket.on('popupMessage',function(data){
-			
-		});
+			socket.on('closePopup',function(data){
+				self.hazard.hideModal();
+			});
 
-		socket.on('closePopup',function(data){
-			self.hazard.hideModal();
-		});
+			socket.on('chooseProductionCard',function(data){
+				if(typef(data) != `undefined` && typeof(data.cardID) != `undefined`) self.hazard.chooseCardPopup(data.cardID);
+			});
 
-		socket.on('chooseProductionCard',function(data){
-			if(typef(data) != `undefined` && typeof(data.cardID) != `undefined`) self.hazard.chooseCardPopup(data.cardID);
-		});
+			socket.on('init',function(data){
+				self.gameStart();
+			});
 
-		socket.on('init',function(data){
-			self.gameStart();
-		});
+			socket.on('parsingXML',function(data){
+				self.parseXML('test.xml',self.hazard.initMap);	// DA RIVEDERE
+			});
 
-		socket.on('parsingXML',function(data){
-			self.parseXML();	// DA RIVEDERE
-		});
-
-		socket.on('connection_error', function(){
-			console.log("Waiting for connection ...");
-		});
+			socket.on('connection_error', function(){
+				console.log("Waiting for connection ...");
+			});
 
 
-		socket.emit('init_dashboard');
+			socket.emit('init_dashboard');
 		this.hazard.initDashboard();
 
 	}
@@ -117,7 +117,7 @@ var GameState = require('./utils/GameState.js');
 	 * Esegue il parsing del file XML di configurazione
 	 * @return {NA}
 	 */
-	 parseXML(path){
+	 parseXML(path,callback){
 	 	var self = this;
 		// Load the xml file using ajax 
 		$.ajax({
@@ -171,7 +171,7 @@ var GameState = require('./utils/GameState.js');
 				}
 			}
 
-
+			callback(self.areas,self.plots,self.links);
 
 		},
 		error: function (exception) {
@@ -265,6 +265,10 @@ var GameState = require('./utils/GameState.js');
 			}
 			if (diff['numOfProductionCards']) {
 
+			}
+
+			if (diff['contagionRatios']){
+				this.hazard.setProgress(diff.contagionRatios[0].contagionRatio);
 			}
 
 			if (diff['type'] == 'ActionTurn') {

@@ -19,7 +19,7 @@ class Utils {
 		for(var key in vars){
 			if(vars[key] == -1) continue;
 			var i = this.getIndexByValue(vars[key]);
-			content_text += '<span style=\"font-weight:bold;\">'+key+' :</span><div style="width:1px;height:1px;background-color:'+config['LEGEND'][i].color+'"></div><br />';
+			content_text += '<span style=\"font-weight:bold;\">'+key+' :</span><div style="width:1px;height:1px;border-radius:50%;background-color:'+config['LEGEND'][i].color+'"></div><br />';
 		}
 		//var tooltip = {content: content_text}
 		return content_text;

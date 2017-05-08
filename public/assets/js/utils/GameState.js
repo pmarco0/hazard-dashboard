@@ -72,6 +72,9 @@ class GameState {
 						case 'numOfProductionCards':
 							changes['numOfProductionCards'] = this.state.gameState.numOfProductionCards;
 						break;
+						case 'contagionRatios':
+							changes['contagionRatios'] = this.state.gameState.contagionRatios;
+						break;
 					}
 				} else {
 					changes['type'] = this.state.currentTurn.type;
