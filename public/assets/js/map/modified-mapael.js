@@ -1179,6 +1179,9 @@
             if (opt.afterUpdate) opt.afterUpdate(self.$container, self.paper, self.areas, self.plots, self.options);
         },
 
+
+
+
         /*
          * Draw all links between plots on the paper
          */
@@ -1218,11 +1221,20 @@
                     coordsP2.x = p2.x;
                     coordsP2.y = p2.y;
                 }
-                links[id] = self.drawLink(id, coordsP1.x, coordsP1.y, coordsP2.x, coordsP2.y, elemOptions);
+                links[id] = self.drawLinkJS(id, coordsP1.x, coordsP1.y, coordsP2.x, coordsP2.y, elemOptions);
             });
             return links;
         },
 
+        drawLinkJS: function(id, xa, ya, xb, yb, elemOptions) {
+            var self = this;
+            var elem = {};
+
+            elem.mapElem = self.paper.path(["M",xa,ya,"L",xb,yb]).attr(elemOptions.attrs);
+            self.initElem(elem, elemOptions, id);
+
+            return elem;
+        },
         /*
          * Draw a curved link between two couples of coordinates a(xa,ya) and b(xb, yb) on the paper
          */

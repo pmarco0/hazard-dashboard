@@ -123,6 +123,7 @@ class Dashboard {
 		},
 		//QUI DEFINISCO LE CITTA'
 		plots : p,
+		links : l,
 		});
 	}
 

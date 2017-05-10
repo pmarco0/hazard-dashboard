@@ -166,8 +166,8 @@
         <location>
           <name>Australia</name>
           <value>0</value>
-          <latitude>315</latitude>
-          <longitude>40</longitude>
+          <latitude>316</latitude>
+          <longitude>65</longitude>
           <leds>
             <led>
               <number>10</number>
@@ -180,14 +180,15 @@
           </leds>
           <neighborhood>
             <neighbor>NewZeland</neighbor>
-            <neighbor>Location3</neighbor>
+            
           </neighborhood>
         </location>
         <location>
           <name>NewZeland</name>
           <value>0</value>
-          <latitude>350</latitude>
-          <longitude>16</longitude>
+          <latitude>354</latitude>
+          <longitude>50</longitude>
+          <offsetLeft>-10</offsetLeft>
           <leds>
             <led>
               <number>10</number>
@@ -200,14 +201,14 @@
           </leds>
           <neighborhood>
             <neighbor>Australia</neighbor>
-            <neighbor>Location1</neighbor>
+            
           </neighborhood>
         </location>
         <location>
           <name>Russia</name>
           <value>0</value>
-          <latitude>282</latitude>
-          <longitude>155</longitude>
+          <latitude>278</latitude>
+          <longitude>150</longitude>
           <leds>
             <led>
               <number>10</number>
@@ -219,15 +220,14 @@
             </led>
           </leds>
           <neighborhood>
-            <neighbor>Location1</neighbor>
-            <neighbor>Location3</neighbor>
+            <neighbor>Japan</neighbor>
           </neighborhood>
         </location>
         <location>
           <name>ChinaArea</name>
           <value>0</value>
           <latitude>285</latitude>
-          <longitude>101</longitude>
+          <longitude>124</longitude>
           <leds>
             <led>
               <number>10</number>
@@ -239,14 +239,14 @@
             </led>
           </leds>
           <neighborhood>
-            <neighbor>Location1</neighbor>
-            <neighbor>Location3</neighbor>
+            
+            
           </neighborhood>
         </location>
         <location>
           <name>CentralAsia</name>
           <value>0</value>
-          <latitude>244</latitude>
+          <latitude>250</latitude>
           <longitude>140</longitude>
           <leds>
             <led>
@@ -259,15 +259,15 @@
             </led>
           </leds>
           <neighborhood>
-            <neighbor>Location1</neighbor>
-            <neighbor>Location3</neighbor>
+            
+            
           </neighborhood>
         </location>
         <location>
           <name>India</name>
           <value>0</value>
-          <latitude>257</latitude>
-          <longitude>87</longitude>
+          <latitude>259</latitude>
+          <longitude>113</longitude>
           <leds>
             <led>
               <number>10</number>
@@ -279,15 +279,15 @@
             </led>
           </leds>
           <neighborhood>
-            <neighbor>Location1</neighbor>
-            <neighbor>Location3</neighbor>
+            
+            
           </neighborhood>
         </location>
         <location>
           <name>SouthEastAsia</name>
           <value>0</value>
-          <latitude>295</latitude>
-          <longitude>75</longitude>
+          <latitude>300</latitude>
+          <longitude>91</longitude>
           <leds>
             <led>
               <number>10</number>
@@ -299,134 +299,14 @@
             </led>
           </leds>
           <neighborhood>
-            <neighbor>Location1</neighbor>
-            <neighbor>Location3</neighbor>
+            
+            
           </neighborhood>
         </location>
         <location>
           <name>MiddleEast</name>
           <value>0</value>
-          <latitude>222</latitude>
-          <longitude>115</longitude>
-          <leds>
-            <led>
-              <number>10</number>
-              <emergency>Emergenza1</emergency>
-            </led>
-            <led>
-              <number>11</number>
-              <emergency>Emergenza2</emergency>
-            </led>
-          </leds>
-          <neighborhood>
-            <neighbor>Location1</neighbor>
-            <neighbor>Location3</neighbor>
-          </neighborhood>
-        </location>
-        <location>
-          <name>Japan</name>
-          <value>0</value>
-          <latitude>319</latitude>
-          <longitude>119</longitude>
-          <leds>
-            <led>
-              <number>10</number>
-              <emergency>Emergenza1</emergency>
-            </led>
-            <led>
-              <number>11</number>
-              <emergency>Emergenza2</emergency>
-            </led>
-          </leds>
-          <neighborhood>
-            <neighbor>Location1</neighbor>
-            <neighbor>Location3</neighbor>
-          </neighborhood>
-        </location>
-        <location>
-          <name>NorthAfrica</name>
-          <value>0</value>
-          <latitude>186</latitude>
-          <longitude>108</longitude>
-          <leds>
-            <led>
-              <number>10</number>
-              <emergency>Emergenza1</emergency>
-            </led>
-            <led>
-              <number>11</number>
-              <emergency>Emergenza2</emergency>
-            </led>
-          </leds>
-          <neighborhood>
-            <neighbor>Location1</neighbor>
-            <neighbor>Location3</neighbor>
-          </neighborhood>
-        </location>
-        <location>
-          <name>CentralAfrica</name>
-          <value>0</value>
-          <latitude>184</latitude>
-          <longitude>84</longitude>
-          <leds>
-            <led>
-              <number>10</number>
-              <emergency>Emergenza1</emergency>
-            </led>
-            <led>
-              <number>11</number>
-              <emergency>Emergenza2</emergency>
-            </led>
-          </leds>
-          <neighborhood>
-            <neighbor>Location1</neighbor>
-            <neighbor>Location3</neighbor>
-          </neighborhood>
-        </location>
-        <location>
-          <name>SouthAfrica</name>
-          <value>0</value>
-          <latitude>195</latitude>
-          <longitude>48</longitude>
-          <leds>
-            <led>
-              <number>10</number>
-              <emergency>Emergenza1</emergency>
-            </led>
-            <led>
-              <number>11</number>
-              <emergency>Emergenza2</emergency>
-            </led>
-          </leds>
-          <neighborhood>
-            <neighbor>Location1</neighbor>
-            <neighbor>Location3</neighbor>
-          </neighborhood>
-        </location>
-        <location>
-          <name>Madagascar</name>
-          <value>0</value>
           <latitude>226</latitude>
-          <longitude>43</longitude>
-          <leds>
-            <led>
-              <number>10</number>
-              <emergency>Emergenza1</emergency>
-            </led>
-            <led>
-              <number>11</number>
-              <emergency>Emergenza2</emergency>
-            </led>
-          </leds>
-          <neighborhood>
-            <neighbor>Location1</neighbor>
-            <neighbor>Location3</neighbor>
-          </neighborhood>
-        </location>
-        <location>
-          <name>EuWest</name>
-          <value>0</value>
-          <latitude>173</latitude>
           <longitude>123</longitude>
           <leds>
             <led>
@@ -439,15 +319,133 @@
             </led>
           </leds>
           <neighborhood>
-            <neighbor>Location1</neighbor>
-            <neighbor>Location3</neighbor>
+            
+            
+          </neighborhood>
+        </location>
+        <location>
+          <name>Japan</name>
+          <value>0</value>
+          <latitude>321</latitude>
+          <longitude>129</longitude>
+          <leds>
+            <led>
+              <number>10</number>
+              <emergency>Emergenza1</emergency>
+            </led>
+            <led>
+              <number>11</number>
+              <emergency>Emergenza2</emergency>
+            </led>
+          </leds>
+          <neighborhood>
+            <neighbor>Russia</neighbor>
+            <neighbor>SouthAfrica</neighbor>
+          </neighborhood>
+        </location>
+        <location>
+          <name>NorthAfrica</name>
+          <value>0</value>
+          <latitude>186</latitude>
+          <longitude>119</longitude>
+          <leds>
+            <led>
+              <number>10</number>
+              <emergency>Emergenza1</emergency>
+            </led>
+            <led>
+              <number>11</number>
+              <emergency>Emergenza2</emergency>
+            </led>
+          </leds>
+          <neighborhood>
+            
+            
+          </neighborhood>
+        </location>
+        <location>
+          <name>CentralAfrica</name>
+          <value>0</value>
+          <latitude>202</latitude>
+          <longitude>99</longitude>
+          <leds>
+            <led>
+              <number>10</number>
+              <emergency>Emergenza1</emergency>
+            </led>
+            <led>
+              <number>11</number>
+              <emergency>Emergenza2</emergency>
+            </led>
+          </leds>
+          <neighborhood>
+            
+            
+          </neighborhood>
+        </location>
+        <location>
+          <name>SouthAfrica</name>
+          <value>0</value>
+          <latitude>204</latitude>
+          <longitude>70</longitude>
+          <leds>
+            <led>
+              <number>10</number>
+              <emergency>Emergenza1</emergency>
+            </led>
+            <led>
+              <number>11</number>
+              <emergency>Emergenza2</emergency>
+            </led>
+          </leds>
+          <neighborhood>
+            <neighbor>Japan</neighbor>
+          </neighborhood>
+        </location>
+        <location>
+          <name>Madagascar</name>
+          <value>0</value>
+          <latitude>227</latitude>
+          <longitude>71</longitude>
+          <leds>
+            <led>
+              <number>10</number>
+              <emergency>Emergenza1</emergency>
+            </led>
+            <led>
+              <number>11</number>
+              <emergency>Emergenza2</emergency>
+            </led>
+          </leds>
+          <neighborhood>
+            
+            
+          </neighborhood>
+        </location>
+        <location>
+          <name>EuWest</name>
+          <value>0</value>
+          <latitude>178</latitude>
+          <longitude>131</longitude>
+          <leds>
+            <led>
+              <number>10</number>
+              <emergency>Emergenza1</emergency>
+            </led>
+            <led>
+              <number>11</number>
+              <emergency>Emergenza2</emergency>
+            </led>
+          </leds>
+          <neighborhood>
+            <neighbor>USA</neighbor>
           </neighborhood>
         </location>
         <location>
           <name>EuEast</name>
           <value>0</value>
-          <latitude>200</latitude>
-          <longitude>136</longitude>
+          <latitude>205</latitude>
+          <longitude>141</longitude>
           <leds>
             <led>
               <number>10</number>
@@ -459,15 +457,15 @@
             </led>
           </leds>
           <neighborhood>
-            <neighbor>Location1</neighbor>
-            <neighbor>Location3</neighbor>
+            
+            
           </neighborhood>
         </location>
         <location>
           <name>UK</name>
           <value>0</value>
-          <latitude>171</latitude>
-          <longitude>140</longitude>
+          <latitude>176</latitude>
+          <longitude>147</longitude>
           <leds>
             <led>
               <number>10</number>
@@ -479,8 +477,8 @@
             </led>
           </leds>
           <neighborhood>
-            <neighbor>Location1</neighbor>
-            <neighbor>Location3</neighbor>
+            
+            
           </neighborhood>
         </location>
         <location>
@@ -499,15 +497,15 @@
             </led>
           </leds>
           <neighborhood>
-            <neighbor>Location1</neighbor>
-            <neighbor>Location3</neighbor>
+            
+            
           </neighborhood>
         </location>
         <location>
           <name>Scandinavia</name>
           <value>0</value>
-          <latitude>194</latitude>
-          <longitude>157</longitude>
+          <latitude>196</latitude>
+          <longitude>155</longitude>
           <leds>
             <led>
               <number>10</number>
@@ -519,15 +517,15 @@
             </led>
           </leds>
           <neighborhood>
-            <neighbor>Location1</neighbor>
-            <neighbor>Location3</neighbor>
+            
+            
           </neighborhood>
         </location>
         <location>
           <name>Greenland</name>
           <value>0</value>
           <latitude>138</latitude>
-          <longitude>173</longitude>
+          <longitude>170</longitude>
           <leds>
             <led>
               <number>10</number>
@@ -539,15 +537,15 @@
             </led>
           </leds>
           <neighborhood>
-            <neighbor>Location1</neighbor>
-            <neighbor>Location3</neighbor>
+            
+            
           </neighborhood>
         </location>
         <location>
           <name>Canada</name>
           <value>0</value>
-          <latitude>64</latitude>
-          <longitude>150</longitude>
+          <latitude>77</latitude>
+          <longitude>155</longitude>
           <leds>
             <led>
               <number>10</number>
@@ -559,15 +557,15 @@
             </led>
           </leds>
           <neighborhood>
-            <neighbor>Location1</neighbor>
-            <neighbor>Location3</neighbor>
+            
+            
           </neighborhood>
         </location>
         <location>
           <name>USA</name>
           <value>0</value>
-          <latitude>92</latitude>
-          <longitude>118</longitude>
+          <latitude>95</latitude>
+          <longitude>130</longitude>
           <leds>
             <led>
               <number>10</number>
@@ -579,14 +577,33 @@
             </led>
           </leds>
           <neighborhood>
-            <neighbor>Location1</neighbor>
-            <neighbor>Location3</neighbor>
+            <neighbor>EuWest</neighbor>
           </neighborhood>
         </location>
         <location>
           <name>CentralAmerica</name>
           <value>0</value>
-          <latitude>90</latitude>
+          <latitude>75</latitude>
+          <longitude>110</longitude>
+          <leds>
+            <led>
+              <number>10</number>
+              <emergency>Emergenza1</emergency>
+            </led>
+            <led>
+              <number>11</number>
+              <emergency>Emergenza2</emergency>
+            </led>
+          </leds>
+          <neighborhood>
+            
+            
+          </neighborhood>
+        </location>
+        <location>
+          <name>SouthAmericaCB</name>
+          <value>0</value>
+          <latitude>110</latitude>
           <longitude>95</longitude>
           <leds>
             <led>
@@ -599,35 +616,15 @@
             </led>
           </leds>
           <neighborhood>
-            <neighbor>Location1</neighbor>
-            <neighbor>Location3</neighbor>
-          </neighborhood>
-        </location>
-        <location>
-          <name>SouthAmericaCB</name>
-          <value>0</value>
-          <latitude>116</latitude>
-          <longitude>80</longitude>
-          <leds>
-            <led>
-              <number>10</number>
-              <emergency>Emergenza1</emergency>
-            </led>
-            <led>
-              <number>11</number>
-              <emergency>Emergenza2</emergency>
-            </led>
-          </leds>
-          <neighborhood>
-            <neighbor>Location1</neighbor>
-            <neighbor>Location3</neighbor>
+            
+            
           </neighborhood>
         </location>
         <location>
           <name>SouthAmericaBR</name>
           <value>0</value>
-          <latitude>139</latitude>
-          <longitude>57</longitude>
+          <latitude>131</latitude>
+          <longitude>79</longitude>
           <leds>
             <led>
               <number>10</number>
@@ -639,15 +636,15 @@
             </led>
           </leds>
           <neighborhood>
-            <neighbor>Location1</neighbor>
-            <neighbor>Location3</neighbor>
+            
+            
           </neighborhood>
         </location>
         <location>
           <name>SouthAmericaUR</name>
           <value>0</value>
           <latitude>110</latitude>
-          <longitude>17</longitude>
+          <longitude>50</longitude>
           <leds>
             <led>
               <number>10</number>
@@ -659,8 +656,8 @@
             </led>
           </leds>
           <neighborhood>
-            <neighbor>Location1</neighbor>
-            <neighbor>Location3</neighbor>
+            
+            
           </neighborhood>
         </location>
       </area>

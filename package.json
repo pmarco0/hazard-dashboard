@@ -5,6 +5,7 @@
   "main": "app.js",
   "dependencies": {
     "bufferutil": "^2.0.1",
+    "deep-diff": "^0.3.8",
     "express": "^4.14.1",
     "jquery": "^3.1.1",
     "jquery-mapael": "^2.0.0",

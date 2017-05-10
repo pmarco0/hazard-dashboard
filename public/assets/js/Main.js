@@ -62,7 +62,6 @@ var GameState = require('./utils/GameState.js');
 			socket.on('welcome',function(data){
 				console.log(data);
 				socket.emit('init_dashboard', data);
-				self.hazard.initDashboard();
 			});
 
 			socket.on('update',function(data){
@@ -101,6 +100,7 @@ var GameState = require('./utils/GameState.js');
 	 * @return NA
 	 */
 	 gameStart(){
+	 	this.hazard.initDashboard();
 	 	this.hazard.hideModal(3000);
 	 	this.hazard.updateTurn();
 	 	this.hazard.addLog('INFO',lang['gamestartstext']);
@@ -131,8 +131,9 @@ var GameState = require('./utils/GameState.js');
 			success: function(xml){
 		// Parsing
 		var json = self.parsing.xml_str2json( xml )
-		console.log(json);
-		
+
+		if(typeof(json) == 'undefined') return;
+
 		//ciclo le l'xml di setup gioco
 		self.cards = json.xml.game.cards;					
 		self.endGame = json.xml.game.endGame;					
@@ -151,28 +152,56 @@ var GameState = require('./utils/GameState.js');
 			self.plots[self.locations[j].name+'-plot'].latitude = self.locations[j].latitude;
 			self.plots[self.locations[j].name+'-plot'].longitude = self.locations[j].longitude;
 
+
+
+
 			for(var em in json.xml.game.emergencies.emergency) self.createEmergency(self.locations[j].name,em.name,0);
 
 				self.plots[self.locations[j].name+'-plot'].tooltip = {};
 				self.plots[self.locations[j].name+'-plot'].tooltip.content = self.utils.__buildTooltip(self.locations[j].name, self.locations[j].emergencies); //CREAZIONE TOOLTIPS
+
+				self.plots[self.locations[j].name+'-plot'].tooltip.offset = {};
+
+				if(typeof(self.locations[j].offsetLeft) != 'undefined') {
+					self.plots[self.locations[j].name+'-plot'].tooltip.offset.left = parseInt(self.locations[j].offsetLeft);
+				}else if(typeof(self.locations[j].offsetTop) != 'undefined'){
+					self.plots[self.locations[j].name+'-plot'].tooltip.offset.top = parseInt(self.locations[j].offsetTop);
+				}
 				self.plots[self.locations[j].name+'-plot'].tooltip.persistent = true;
 				self.plots[self.locations[j].name+'-plot'].text = self.locations[j].name;
 
-				for(var i = 0; i<self.locations[j].neighborhood.neighbor.length;i++){
-					var neigh = self.locations[j].neighborhood.neighbor[i];
-					var link = self.utils.getLinkIdentifier(neigh,self.locations[j].name);
+				if(typeof self.locations[j].neighborhood.neighbor == 'string'){
+					var link = self.utils.getLinkIdentifier(self.locations[j].neighborhood.neighbor,self.locations[j].name);
 					if( typeof(self.links[link]) == 'undefined') {
 						self.links[link] = {};
 						self.links[link].factor = config['DEFAULT_PLOT_FACTOR'];
 						self.links[link].between = self.utils.getPlotsByLink(link);
 						self.links[link].attrs = {};
-						self.links[link].attrs['default-stroke'] = config['DEFAULT_PLOT_STROKE'];
+						self.links[link].attrs['stroke-width'] = config['DEFAULT_PLOT_STROKE'];
+						self.links[link].attrs['stroke-linecap'] = "round";
 					}
-					self.resources = json.xml.game.resources;
-					self.setup = json.xml.game.setup;
-					self.strongholdinfos = json.xml.game.strongholdinfos;
-					self.turns = json.xml.game.turns;
+
+				}else if(typeof self.locations[j].neighborhood.neighbor != 'undefined' && typeof self.locations[j].neighborhood.neighbor == 'array') {
+					for(var neigh in self.locations[j].neighborhood.neighbor){
+						//var neigh = self.locations[j].neighborhood.neighbor[i];
+						var link = self.utils.getLinkIdentifier(neigh,self.locations[j].name);
+						if( typeof(self.links[link]) == 'undefined') {
+							self.links[link] = {};
+							self.links[link].factor = config['DEFAULT_PLOT_FACTOR'];
+							self.links[link].between = self.utils.getPlotsByLink(link);
+							self.links[link].attrs = {};
+							self.links[link].attrs['stroke-width'] = config['DEFAULT_PLOT_STROKE'];
+							self.links[link].attrs['stroke-linecap'] = "round";
+
+						}
+					}
 				}
+
+						self.resources = json.xml.game.resources;
+						self.setup = json.xml.game.setup;
+						self.strongholdinfos = json.xml.game.strongholdinfos;
+						self.turns = json.xml.game.turns;
+
 			}
 
 			callback(self.areas,self.plots,self.links);
