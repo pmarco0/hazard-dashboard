@@ -128,6 +128,15 @@ class Dashboard {
 	}
 
 	/**
+	 * [movePawns description]
+	 * @return {[type]} [description]
+	 */
+	movePawns(id,location,group){
+		
+	}
+
+
+	/**
 	 * Aggiorna il tooltip in caso di eliminazione o modifica di una emergenza
 	 * @param  {String} area      [ID Univoco dell'area]
 	 * @param  {Object} emergency [Emergenze dell'area]

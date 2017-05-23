@@ -9,3 +9,22 @@
 - La dashboard è accessibile su 127.0.0.1:3000
 - Per inviare le richieste simulando il server si può usare HTTP Requester per Firefox https://addons.mozilla.org/it/firefox/addon/httprequester/
 - Per avviarlo è necessaria una richiesta POST all'indirizzo 127.0.0.1:3000/start (Simula il server centrale che avvia il gioco)
+
+Le librerie esterne utilizzate sono:
+
+- jquery
+- express
+- socket.io
+- raphael
+- jquery-mousewheel
+- deep-diff
+
+Per sviluppo, avvio e unit test:
+
+- browserify
+- babel-cli
+- babili
+- jsdom
+- mocha
+- mocha-jsdom
+- chai

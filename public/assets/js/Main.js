@@ -37,6 +37,7 @@ var GameState = require('./utils/GameState.js');
 	 	this.areas = {};
 	 	this.plots = {};
 	 	this.links = {};
+	 	this.pawns = {};
 		// Inizializzazione variabili di gioco
 		this.cards = {};
 		this.endGame = {};
@@ -137,10 +138,21 @@ var GameState = require('./utils/GameState.js');
 		//ciclo le l'xml di setup gioco
 		self.cards = json.xml.game.cards;					
 		self.endGame = json.xml.game.endGame;					
-		self.groups = json.xml.game.groups;
+		//self.groups = json.xml.game.groups;
 		self.locale = json.xml.game.locale
 		self.locations = json.xml.game.map.area.location;
 		
+		for(var key in json.xml.game.groups) {
+			if(json.xml.game.groups.hasOwnProperty(key)){
+				for(var i = 0; i< json.xml.game.groups[key].length;i++){
+					self.groups[json.xml.game.groups[key][i]['name']] = {};
+					var groupColor = self.utils.getRandomColor();
+					self.groups[json.xml.game.groups[key][i]['name']].color = groupColor.rgb;
+					self.groups[json.xml.game.groups[key][i]['name']].location = json.xml.game.groups[key][i]['startingPoint'];
+				}
+			}
+		}
+
 		for(var j = 0; j < self.locations.length; j++) {
 			self.areas[self.locations[j].name] = {};
 			self.areas[self.locations[j].name].emergencies = {};
@@ -274,7 +286,11 @@ var GameState = require('./utils/GameState.js');
 				var pawns = diff['pawns'];
 				for (var j = 0; j < pawns.length; j++) {
 					/* Muove la pedina tramite movePawns(IDPEDINA,LOCAZIONESUCCESSIVA) */
-					movePawns(pawns[j].pawnID, pawns[j].location);
+					if(this.groups[pawns[j].group].location != pawns[j].location){
+						/** Si è spostata la pedina pawnID del gruppo pawns[j].group in posizione pawns[j].location */
+						this.groups[pawns[j].group].location = pawns[j].location; //Aggiorno la posizione corrente della pedina del gruppo
+						this.hazard.movePawns(pawns[j].pawnID, pawns[j].location, pawns[j].group);
+					}
 					this.hazard.addLog("INFO", logString);
 				}
 			}
