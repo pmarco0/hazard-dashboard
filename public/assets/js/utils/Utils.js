@@ -14,7 +14,7 @@ class Utils {
 	 * @return NA
 	 */
 	__buildTooltip(name,vars){
-		var content_text = `<ul class="tooltip-list">`;
+		var content_text = `<ul class="tooltip-list" id="`+name+`-tooltiplist">`;
 		content_text += `<li><span style=\"font-weight:bold;\">`+lang['zone']+`</span>` + name+`</li>`;
 
 		for(var key in vars){
@@ -23,7 +23,7 @@ class Utils {
 			content_text += `
 							<li><div class="float-wrapper">
 							<span>`+key+` :</span>
-							<div style="background-color:`+config['LEGEND'][i].color+`"></div>
+							<div id="`+key+`-`+name+`" style="background-color:`+config['LEGEND'][i].color+`"></div>
 							</li></div>`;
 		}
 		content_text += `</ul>`;

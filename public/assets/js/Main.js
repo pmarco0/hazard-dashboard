@@ -104,15 +104,17 @@ var GameState = require('./utils/GameState.js');
 	 	var self = this;
 	 	this.hazard.initDashboard();
 	 	this.hazard.hideModal(3000);
-	 	this.hazard.updateTurn();
-	 	this.hazard.addLog('INFO',lang['gamestartstext']);
-	 	this.parseXML('test.xml',[this.hazard.initMap,this.placePawnsCallback]);
+	 	//this.hazard.updateTurn();
+	 	//this.hazard.addLog('INFO',lang['gamestartstext']);
+	 	var dummyStateCallback = this.initDummyState.bind(this);
+	 	this.parseXML('test.xml',[this.hazard.initMap,this.placePawnsCallback,dummyStateCallback]);
 	 	if(config['DEBUG']) {
 			$('#debug').show();
 				$('#debug-confirm').click(function() {
 				self.handleState($('#debug-text').val());
 			});
 	 	}
+	 	//this.initDummyState();
 	 }
 
 	/**
@@ -152,6 +154,39 @@ var GameState = require('./utils/GameState.js');
 	 	}
 	 }
 
+
+	 initDummyState(){
+	 	var dummyString = `{"state":{"gameState":{"currentState":"GAME_ACTIVE",
+	 						"gameMap":{"locations":[],"pawns":[]},"blockades":[],"emergencies":[],
+	 						"maxEmergencyLevel":5,"numOfProductionCards":1,"currentStrongholdCost":5,"contagionRatios":[]},
+	 						"currentTurn":{"type":"Dummy","group":{"name":"Dummy","resources":[]},"numActions":0,"maxNumActions":0}},"response": { "success": "true", "logString": "`+lang['gamestartstext']+`" }}`;
+	 	var dummyState = JSON.parse(dummyString);
+	 	for(var id in this.areas){
+	 		var l = {};
+	 		l['name'] = id;
+	 		l['locationID'] = 'it.uniba.hazard.engine.map.Location_'+id;
+	 		l['emergencyLevels'] = [];
+	 		for(var em in this.areas[id].emergencies){
+	 			var e = {};
+	 			e['emergency'] = em;
+	 			e['level'] = this.areas[id].emergencies[em];
+	 			l['emergencyLevels'].push(e);
+	 		}
+	 		dummyState.state.gameState.gameMap.locations.push(l);
+	 	}
+
+ 		for (var g in this.groups){
+ 			var pawn = {};
+ 			pawn['pawnID'] = 'it.uniba.hazard.engine.pawns.'+this.groups[g].type+'_'+g;
+ 			pawn['type']  = this.groups[g].type;
+ 			pawn['location'] = this.groups[g].startingPoint;
+ 			pawn['group'] = g;
+ 			dummyState.state.gameState.gameMap.pawns.push(pawn);
+ 		}
+ 		this.gameState.setState(dummyState.state);
+ 		console.log('Dummy State: '+JSON.stringify(dummyState));
+	 }
+
 	/**
 	 * Esegue il parsing del file XML di configurazione
 	 * @return {NA}
@@ -166,6 +201,7 @@ var GameState = require('./utils/GameState.js');
 			success: function(xml){
 		// Parsing
 		var json = self.parsing.xml_str2json( xml )
+		var dummyState = {};
 
 		if(typeof(json) == 'undefined') return;
 
@@ -193,7 +229,7 @@ var GameState = require('./utils/GameState.js');
 
 
 
-			for(var em in json.xml.game.emergencies.emergency) self.createEmergency(self.locations[j].name,json.xml.game.emergencies.emergency[em].name,0);
+			for(var em in json.xml.game.emergencies.emergency) self.setEmergency(self.locations[j].name,json.xml.game.emergencies.emergency[em].name,0);
 
 				self.plots[self.locations[j].name+'-plot'].tooltip = {};
 				self.areas[self.locations[j].name].visualName = self.locations[j].visualName;
@@ -270,6 +306,7 @@ var GameState = require('./utils/GameState.js');
 
 			callback[0](self.areas,self.plots,self.links);
 			callback[1](self.groups,self.plots,self.areas,self.hazard,self.utils);
+			callback[2]();
 
 		},
 		error: function (exception) {
@@ -279,18 +316,19 @@ var GameState = require('./utils/GameState.js');
 	}
 
 
-	createEmergency(locationID,emergency,level){
+	/*createEmergency(locationID,emergency,level){
 		this.areas[locationID].emergencies[emergency] =  level;
-	}
+	}*/
 
 	eliminateEmergency(locationID,area) {
 		this.areas[locationID].emergencies[emergency] = -1;
-		this.hazard.updateEmergenciesTooltip(locationID,this.area[locationID].emergencies)
+		this.hazard.updateEmergenciesTooltip(locationID,this.areas[locationID].emergencies)
 	}
 
-	modificateEmergency(locationID,emergency,level){
+	setEmergency(locationID,emergency,level){
+		var initialization = (typeof this.areas[locationID].emergencies[emergency] == 'undefined');
 		this.areas[locationID].emergencies[emergency] = level;
-		this.hazard.updateEmergenciesTooltip(locationID,this.area[locationID].emergencies)
+		if(!initialization) this.hazard.updateEmergenciesTooltip(locationID,this.areas[locationID].emergencies)
 	}
 
 
@@ -299,12 +337,16 @@ var GameState = require('./utils/GameState.js');
 			console.warn('Parameter data is a string, parsing as JSON Object');
 			data = JSON.parse(data);
 		}
+
+		var response = data.response;
+		var data = data.state;
+
 		var diff = this.gameState.setState(data);
 		if(diff.length == 0) return;
 
 		var status = data.gameState.currentState;
-		var success = data.success;
-		var logString = data.logString;
+		var success = response.success;
+		var logString = response.logString;
 
 		//for (var i = 0; i < diff.length; i++) {
 			if (diff['currentState'] == 'GAME_ACTIVE') {
@@ -312,10 +354,8 @@ var GameState = require('./utils/GameState.js');
 			} else if (diff['currentState'] == 'GAME_VICTORY') {
 				/* Conclude il gioco con la vittoria dei giocatori */
 				this.gameVictory();
-				this.hazard.addLog("DANGER", logString);
 			} else if (diff['currentState'] == 'GAME_LOSS'){
 				this.gameOver(); 
-				this.hazard.addLog("DANGER", logString);
 			}
 			if (diff['locations']) {
 				var loc = diff['locations'];
@@ -323,16 +363,13 @@ var GameState = require('./utils/GameState.js');
 					for (var k = 0; k < loc[j].emergencyLevels.length; k++) {
 						if (loc[j].emergencyLevels[k].level == 1) {
 							/*Crea una nuova malattia nella nazione tramite createEmergency(LOCATIONID,NOMEEMERGENZA,LIVELLOEMERGENZA) */
-							this.createEmergency(loc[j].locationID, loc[j].emergencyLevels[k].emergency, loc[j].emergencyLevels[k].level);
-							this.hazard.addLog("INFO", logString);
-						} else if (loc[j].emergencyLevels[k].level == 0) {
+							this.setEmergency(loc[j].name, loc[j].emergencyLevels[k].emergency, loc[j].emergencyLevels[k].level);
+						} else if (loc[j].emergencyLevels[k].level == -1) {
 							/*La malattia è stata curata, quindi va eliminata dalla mappa tramite eliminateEmergency(LOCATIONID,NOMEEMERGENZA) */
-							this.eliminateEmergency(loc[j].locationID, loc[j].emergencyLevels[k].emergency);
-							this.hazard.addLog("INFO", logString);
+							this.eliminateEmergency(loc[j].name, loc[j].emergencyLevels[k].emergency);
 						} else {
 							/*Il livello malattia è stato modificato tramite modificateEmergencyLevel(LOCATIONID,NOMEEMERGENZA,LIVELLOEMERGENZA) */
-							this.modificateEmergencyLevel(loc[j].locationID, loc[j].emergencyLevels[k].emergency, loc[j].emergencyLevels[k].level);
-							this.hazard.addLog("INFO", logString);
+							this.setEmergency(loc[j].name, loc[j].emergencyLevels[k].emergency, loc[j].emergencyLevels[k].level);
 						}
 					}
 				}
@@ -355,7 +392,6 @@ var GameState = require('./utils/GameState.js');
 						group[pawns[j].group] = this.groups[pawns[j].group].color;
 						this.hazard.setPawn(group, pawns[j].location,position );
 					}
-					this.hazard.addLog("INFO", logString);
 				}
 			}
 
@@ -413,14 +449,14 @@ var GameState = require('./utils/GameState.js');
 				for (var j = 0; j < group.resources.length; j++) {
 					/* Cambia le risorse presenti nella schermata del giocatore  tramite changeResources(risorsa,numero)*/
 					this.hazard.changeResources(group.resources[j].resource, group.resources[j].quantity);
-					this.hazard.addLog("INFO", logString);
 				}
 			}
-			/* Se non è stato possibile compiere l'azione, verrà visualizzato un messaggio di errore */
-			if (data.success == false) {
-				this.hazard.addLog("DANGER", logString);
+
+			if(diff['numActions'] || diff['maxNumActions']){
+				this.hazard.setActions(diff['numActions'],diff['maxNumActions']);
 			}
 
+			this.hazard.addLog("INFO", logString);
 		}
 
 	//}

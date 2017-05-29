@@ -55,7 +55,12 @@ class GameState {
 						break;
 						case 'gameMap':
 							if(diffs[i].path[base+1] == "locations"){
-								changes['locations'] = this.state.gameState.gameMap.locations;
+								changes['locations'] = [];
+								for(var j = 0;i<this.state.gameState.gameMap.locations.length;j++){
+									if(j == diffs[i].path[base+2]){
+										changes['locations'].push(this.state.gameState.gameMap.locations[i]);
+									}
+								}
 							}else{
 								changes['pawns'] = this.state.gameState.gameMap.pawns;
 							}
@@ -77,9 +82,18 @@ class GameState {
 						break;
 					}
 				} else {
-					changes['type'] = this.state.currentTurn.type;
-					changes['group'] = this.state.currentTurn.group;
-
+					switch(diffs[i].path[base]){
+						case 'group':
+							changes['type'] = this.state.currentTurn.type;
+							changes['group'] = this.state.currentTurn.group.name;
+							changes['resources'] = this.state.currentTurn.group.resources;
+						break;
+						case 'numActions':
+						case 'maxNumActions':
+							changes['numActions'] = this.state.currentTurn.numActions;
+							changes['maxNumActions'] = this.state.currentTurn.maxNumActions;
+						break;
+					}
 				}
 			}
 		}

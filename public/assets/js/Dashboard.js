@@ -176,9 +176,7 @@ class Dashboard {
 	 * @return {NA}
 	 */
 	updateEmergenciesTooltip(area,emergency){
-		var updatedOptions = {'areas' : {}};
-		updatedOptions.areas[area].tooltip = this.utils.__buildTooltip(area,emergency);
-		this.map.UpdateMap(updatedOptions,{},{});
+		$('#'+area+'-tooltiplist').replaceWith(this.utils.__buildTooltip(area,emergency));
 	}
 
 
@@ -187,6 +185,10 @@ class Dashboard {
 		this.hideModal(3000);
 	}
 
+
+	setActions(current,max){
+		$('#actions').html('Azioni Disponibili: '+current+'/'+max);
+	}
 
 	/**
 	 * Imposta il valore della progress bar
