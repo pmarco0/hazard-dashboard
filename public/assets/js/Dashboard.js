@@ -1,11 +1,13 @@
 window.$ = window.jQuery   = require('jquery');
+var jquerysvg = require('./lib/jquery.svg.min.js');
+var jquerysvganim = require('./lib/jquery.svganim.js');
 var l = require('./lang/Lang.js');
 var config = require('./Config.js');
 var lang = l[config['LANGUAGE']];
 var ModalDialog = require('./utils/ModalDialog.js');
 var MapUtils = require('./utils/MapUtils.js');
 var Utils = require('./utils/Utils.js');
-
+var PawnManager = require('./PawnManager.js')
 /**
  * Classe responsabile delle modifiche grafiche alla dashboard.
  */
@@ -18,6 +20,7 @@ class Dashboard {
 		this.modal = new ModalDialog();
 		this.map = new MapUtils();
 		this.utils = new Utils();
+		this.PawnMan = new PawnManager();
 	}
 
 
@@ -128,13 +131,43 @@ class Dashboard {
 	}
 
 	/**
-	 * [movePawns description]
-	 * @return {[type]} [description]
+	 * Imposta o sposta una pedina
+	 * @param {Object} group    [Identificatore di gruppo e colore]
+	 * @param {String} location [Stringa che identifica univocamente una zona di destinazione]
+	 * @param {Object} position [Posizione x,y sulla mappa, l'oggetto ha due proprietà: top e left]
 	 */
-	movePawns(id,location,group){
-		
+	setPawn(group,location,position){
+		position = this.utils.getRealCoords(position);
+		this.PawnMan.movePawn(group,location,position);
 	}
 
+	/**
+	 * Imposta un HQ per un gruppo contrassegnato dal colore color
+	 * @param {[type]} location [description]
+	 * @param {[type]} color    [description]
+	 */
+	setHQ(location,color){
+		$('#hq-left').append(`<li>
+        <div class="input-color">
+            <span>`+location+`</span>
+            <div class="color-box" style="background-color: `+color+`;"></div>
+        </div>
+    	</li>`);
+	}
+
+	/**
+	 * Imposta la legenda dei colori dei gruppi
+	 * @param {[type]} name  [description]
+	 * @param {[type]} color [description]
+	 */
+	setGroupLegend(name,color){
+		$('#groups-left').append(`<li>
+        <div class="input-color">
+            <span>`+name+`</span>
+            <div class="color-box" style="background-color: `+color+`;"></div>
+        </div>
+    	</li>`);
+	}
 
 	/**
 	 * Aggiorna il tooltip in caso di eliminazione o modifica di una emergenza

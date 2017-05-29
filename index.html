@@ -28,7 +28,7 @@
 						<h5 class="text-uppercase text-muted"><strong>Percentuale Infezione</strong></h5>
 						<div class="progress">
 						  <div class="progress-bar" id="progressinf" role="progressbar" aria-valuenow="0"
-						  aria-valuemin="0" aria-valuemax="100" style="width:0%">
+						  aria-valuemin="0" aria-valuemax="100" style="width:0%;color:black;">
 							0% 
 						  </div>
 						</div>
@@ -47,18 +47,32 @@
 						</ul>
 					</div>
 
+					<div class="row">
+						<hr/>
+						<h5 class="text-uppercase text-muted"><strong>HQ</strong></h5>
+						<ul id="hq-left">
+						</ul>
+					</div>
+
+					<div class="row">
+						<hr/>
+						<h5 class="text-uppercase text-muted"><strong>Legenda Gruppi</strong></h5>
+						<ul id="groups-left">
+						</ul>
+					</div>
+
 				</div>
 			</div>
 			
 			
 			<div class="col-lg-10 col-md-10">
-				<div class="pull-right" style="margin-left:2em;">
+				<div class="pull-right" id="contagion-area" style="margin-left:2em;">
 					<h4 class="text-primary text-uppercase text-center" id="cont"><strong>Contagio</strong></h4>
 					<ul id="progress" current="0">
 						<!-- step bar-->
 					</ul>
 				</div>
-				<div class="map-container">
+				<div class="map-container" style="position: relative">
 					<div class="map"><i class="fa fa-spinner fa-spin" style="font-size:24px"></i><p style="font-size:24px"> Caricamento in Corso ...</p></div>
 					<div class="areaLegend"></div>
 				</div>
@@ -67,7 +81,13 @@
 		</div>
 	
     </div>
-	
+	<!-- Debug -->
+	<div id="debug" class="form-group" style="display: none;width:100%;padding:10px;">
+		<label for="debug-text">State: </label>
+		<textarea class="form-control" id="debug-text" rows="8"></textarea>
+		<button type="button" class="btn btn-primary btn-lg" value="Send" id="debug-confirm">Send</button>
+	</div>
+
 	<!-- Modal -->
 	<div id="myModal" class="modal fade"  data-backdrop="static" data-keyboard="false" role="dialog">
 	  <div class="modal-dialog">

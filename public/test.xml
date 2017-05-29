@@ -17,10 +17,10 @@
           <resource>Risorsa2</resource>
         </resourcesUsed>
         <headquarters>
-          <headquarter>Location1</headquarter>
-          <headquarter>Location3</headquarter>
+          <headquarter>EuWest</headquarter>
+          <headquarter>Canada</headquarter>
         </headquarters>
-        <startingPoint>Location2</startingPoint>
+        <startingPoint>Australia</startingPoint>
       </actionGroup>
       <actionGroup>
         <name>ActionGroup2</name>
@@ -32,10 +32,10 @@
           <resource>Risorse4</resource>
         </resourcesUsed>
         <headquarters>
-          <headquarter>Location2</headquarter>
-          <headquarter>Location1</headquarter>
+          <headquarter>CentralAmerica</headquarter>
+          <headquarter>SouthAmericaCB</headquarter>
         </headquarters>
-        <startingPoint>Location3</startingPoint>
+        <startingPoint>Japan</startingPoint>
       </actionGroup>
       <productionGroup>
         <name>ProductionGroup1</name>
@@ -165,6 +165,7 @@
         <name>Area1</name>
         <location>
           <name>Australia</name>
+          <visualName>Australia</visualName>
           <value>0</value>
           <latitude>316</latitude>
           <longitude>65</longitude>
@@ -180,11 +181,11 @@
           </leds>
           <neighborhood>
             <neighbor>NewZeland</neighbor>
-            
           </neighborhood>
         </location>
         <location>
           <name>NewZeland</name>
+          <visualName>Nuova Zelanda</visualName>
           <value>0</value>
           <latitude>354</latitude>
           <longitude>50</longitude>
@@ -201,11 +202,11 @@
           </leds>
           <neighborhood>
             <neighbor>Australia</neighbor>
-            
           </neighborhood>
         </location>
         <location>
           <name>Russia</name>
+          <visualName>Russia</visualName>
           <value>0</value>
           <latitude>278</latitude>
           <longitude>150</longitude>
@@ -225,6 +226,7 @@
         </location>
         <location>
           <name>ChinaArea</name>
+          <visualName>Area Cinese</visualName>
           <value>0</value>
           <latitude>285</latitude>
           <longitude>124</longitude>
@@ -238,10 +240,7 @@
               <emergency>Emergenza2</emergency>
             </led>
           </leds>
-          <neighborhood>
-            
-            
-          </neighborhood>
+          <neighborhood></neighborhood>
         </location>
         <location>
           <name>CentralAsia</name>
@@ -258,10 +257,7 @@
               <emergency>Emergenza2</emergency>
             </led>
           </leds>
-          <neighborhood>
-            
-            
-          </neighborhood>
+          <neighborhood></neighborhood>
         </location>
         <location>
           <name>India</name>
@@ -278,10 +274,7 @@
               <emergency>Emergenza2</emergency>
             </led>
           </leds>
-          <neighborhood>
-            
-            
-          </neighborhood>
+          <neighborhood></neighborhood>
         </location>
         <location>
           <name>SouthEastAsia</name>
@@ -298,10 +291,7 @@
               <emergency>Emergenza2</emergency>
             </led>
           </leds>
-          <neighborhood>
-            
-            
-          </neighborhood>
+          <neighborhood></neighborhood>
         </location>
         <location>
           <name>MiddleEast</name>
@@ -318,10 +308,7 @@
               <emergency>Emergenza2</emergency>
             </led>
           </leds>
-          <neighborhood>
-            
-            
-          </neighborhood>
+          <neighborhood></neighborhood>
         </location>
         <location>
           <name>Japan</name>
@@ -358,10 +345,7 @@
               <emergency>Emergenza2</emergency>
             </led>
           </leds>
-          <neighborhood>
-            
-            
-          </neighborhood>
+          <neighborhood></neighborhood>
         </location>
         <location>
           <name>CentralAfrica</name>
@@ -378,10 +362,7 @@
               <emergency>Emergenza2</emergency>
             </led>
           </leds>
-          <neighborhood>
-            
-            
-          </neighborhood>
+          <neighborhood></neighborhood>
         </location>
         <location>
           <name>SouthAfrica</name>
@@ -417,10 +398,7 @@
               <emergency>Emergenza2</emergency>
             </led>
           </leds>
-          <neighborhood>
-            
-            
-          </neighborhood>
+          <neighborhood></neighborhood>
         </location>
         <location>
           <name>EuWest</name>
@@ -456,10 +434,7 @@
               <emergency>Emergenza2</emergency>
             </led>
           </leds>
-          <neighborhood>
-            
-            
-          </neighborhood>
+          <neighborhood></neighborhood>
         </location>
         <location>
           <name>UK</name>
@@ -476,10 +451,7 @@
               <emergency>Emergenza2</emergency>
             </led>
           </leds>
-          <neighborhood>
-            
-            
-          </neighborhood>
+          <neighborhood></neighborhood>
         </location>
         <location>
           <name>Iceland</name>
@@ -496,10 +468,7 @@
               <emergency>Emergenza2</emergency>
             </led>
           </leds>
-          <neighborhood>
-            
-            
-          </neighborhood>
+          <neighborhood></neighborhood>
         </location>
         <location>
           <name>Scandinavia</name>
@@ -516,10 +485,7 @@
               <emergency>Emergenza2</emergency>
             </led>
           </leds>
-          <neighborhood>
-            
-            
-          </neighborhood>
+          <neighborhood></neighborhood>
         </location>
         <location>
           <name>Greenland</name>
@@ -536,10 +502,7 @@
               <emergency>Emergenza2</emergency>
             </led>
           </leds>
-          <neighborhood>
-            
-            
-          </neighborhood>
+          <neighborhood></neighborhood>
         </location>
         <location>
           <name>Canada</name>
@@ -556,10 +519,7 @@
               <emergency>Emergenza2</emergency>
             </led>
           </leds>
-          <neighborhood>
-            
-            
-          </neighborhood>
+          <neighborhood></neighborhood>
         </location>
         <location>
           <name>USA</name>
@@ -595,10 +555,7 @@
               <emergency>Emergenza2</emergency>
             </led>
           </leds>
-          <neighborhood>
-            
-            
-          </neighborhood>
+          <neighborhood></neighborhood>
         </location>
         <location>
           <name>SouthAmericaCB</name>
@@ -615,10 +572,7 @@
               <emergency>Emergenza2</emergency>
             </led>
           </leds>
-          <neighborhood>
-            
-            
-          </neighborhood>
+          <neighborhood></neighborhood>
         </location>
         <location>
           <name>SouthAmericaBR</name>
@@ -635,10 +589,7 @@
               <emergency>Emergenza2</emergency>
             </led>
           </leds>
-          <neighborhood>
-            
-            
-          </neighborhood>
+          <neighborhood></neighborhood>
         </location>
         <location>
           <name>SouthAmericaUR</name>
@@ -655,10 +606,7 @@
               <emergency>Emergenza2</emergency>
             </led>
           </leds>
-          <neighborhood>
-            
-            
-          </neighborhood>
+          <neighborhood></neighborhood>
         </location>
       </area>
     </map>

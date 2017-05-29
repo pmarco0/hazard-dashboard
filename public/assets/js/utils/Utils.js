@@ -14,16 +14,42 @@ class Utils {
 	 * @return NA
 	 */
 	__buildTooltip(name,vars){
-		var content_text = '<span style=\"font-weight:bold;\">'+lang['zone']+'</span>' + name+'<br/>';
+		var content_text = `<ul class="tooltip-list">`;
+		content_text += `<li><span style=\"font-weight:bold;\">`+lang['zone']+`</span>` + name+`</li>`;
 
 		for(var key in vars){
 			if(vars[key] == -1) continue;
 			var i = this.getIndexByValue(vars[key]);
-			content_text += '<span style=\"font-weight:bold;\">'+key+' :</span><div style="width:1px;height:1px;border-radius:50%;background-color:'+config['LEGEND'][i].color+'"></div><br />';
+			content_text += `
+							<li><div class="float-wrapper">
+							<span>`+key+` :</span>
+							<div style="background-color:`+config['LEGEND'][i].color+`"></div>
+							</li></div>`;
 		}
+		content_text += `</ul>`;
 		//var tooltip = {content: content_text}
 		return content_text;
 	}
+
+
+	getDisplayedName(area){
+		if(typeof area.visualName == 'string'){
+			return area.visualName;
+		}else {
+			return area.name;
+		}
+	}
+
+	getRealCoords(position) {
+		//Adatto all'effettiva dimensione della mappa sullo schermo
+		var viewPort = {} 
+		viewPort.left = $(config['MAP_CONTAINER'] + ' > .map > svg').width();
+		viewPort.top = $(config['MAP_CONTAINER'] + ' > .map > svg').height();
+		position.left = (viewPort.left * position.left)/config['MAP_W'];
+		position.top = ((config['MAP_H'] - position.top) * viewPort.top)/config['MAP_H'] + $(config['PROGRESS_BALLS_ID']).height();
+		return position;
+	}
+
 
 	/**
 	 * Ottiene un colore casuale tra quelli predefiniti (JQuery.colors)

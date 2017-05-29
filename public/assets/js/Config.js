@@ -15,7 +15,7 @@ module.exports = {
 	'DEFAULT_AREA_STROKE' : "#7C7C7C", //Colore confini
 	'DEFAULT_AREA_STROKE_WIDTH' : 0.2, //Spessore confini
 
-	'MAP_H' : 180,  //Da spostare nel file XML
+	'MAP_H' : 180, 
 	'MAP_W' : 360,
 
 	//Mappa - Plot
@@ -56,5 +56,5 @@ module.exports = {
 	//Altro
 	'PROGRESS_BALLS_STEP' : 1,
 	'RESOURCES_ICON' : 'fa fa-tint',
-
+	'DEBUG' : true,
 }

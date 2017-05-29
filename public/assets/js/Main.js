@@ -59,7 +59,7 @@ var GameState = require('./utils/GameState.js');
 		//var socket = io.connect();
 		var socket = io();
 
-		
+			console.log(socket);
 			socket.on('welcome',function(data){
 				console.log(data);
 				socket.emit('init_dashboard', data);
@@ -85,9 +85,9 @@ var GameState = require('./utils/GameState.js');
 				self.gameStart();
 			});
 
-			socket.on('parsingXML',function(data){
-				self.parseXML('test.xml',self.hazard.initMap);	// DA RIVEDERE
-			});
+			/*socket.on('parsingXML',function(data){
+				self.parseXML('test.xml',[self.hazard.initMap,self.placePawnsCallback]);	// DA RIVEDERE
+			});*/
 
 			socket.on('connection_error', function(){
 				console.log("Waiting for connection ...");
@@ -100,12 +100,19 @@ var GameState = require('./utils/GameState.js');
 	 * Avvia il gioco eliminando la finestra modal
 	 * @return NA
 	 */
-	 gameStart(){
+	 gameStart(e){
+	 	var self = this;
 	 	this.hazard.initDashboard();
 	 	this.hazard.hideModal(3000);
 	 	this.hazard.updateTurn();
 	 	this.hazard.addLog('INFO',lang['gamestartstext']);
-	 	this.parseXML();
+	 	this.parseXML('test.xml',[this.hazard.initMap,this.placePawnsCallback]);
+	 	if(config['DEBUG']) {
+			$('#debug').show();
+				$('#debug-confirm').click(function() {
+				self.handleState($('#debug-text').val());
+			});
+	 	}
 	 }
 
 	/**
@@ -117,6 +124,33 @@ var GameState = require('./utils/GameState.js');
 	 	this.hazard.showModal(lang['gameover'],lang['gameovertext'],'modal-danger');
 	 }
 
+
+	 /**
+	  * Funzione di callback per posizionare le pedine, costruire la legenda e inserire gli HQ
+	  * @param  {[type]} groups [description]
+	  * @param  {[type]} plots  [description]
+	  * @param  {[type]} hazard [description]
+	  * @param  {[type]} utils  [description]
+	  * @return {[type]}        [description]
+	  */
+	 placePawnsCallback(groups,plots,areas,hazard,utils){
+	 	for(var key in groups){
+	 		var group = groups[key];
+	 		hazard.setGroupLegend(key,group.color)
+	 		for(var h in group.hq){
+	 			hazard.setHQ(utils.getDisplayedName(areas[group.hq[h]]),group.color);
+	 		}
+	 		if(group.type == 'actionGroup'){
+	 			var position = {
+	 				'top': plots[group.startingPoint+'-plot'].longitude,
+	 				'left':plots[group.startingPoint+'-plot'].latitude
+	 			};
+	 			var groupObj= {};
+	 			groupObj[key] = group.color;
+	 			hazard.setPawn(groupObj,group.startingPoint,position);
+	 		}
+	 	}
+	 }
 
 	/**
 	 * Esegue il parsing del file XML di configurazione
@@ -142,19 +176,11 @@ var GameState = require('./utils/GameState.js');
 		self.locale = json.xml.game.locale
 		self.locations = json.xml.game.map.area.location;
 		
-		for(var key in json.xml.game.groups) {
-			if(json.xml.game.groups.hasOwnProperty(key)){
-				for(var i = 0; i< json.xml.game.groups[key].length;i++){
-					self.groups[json.xml.game.groups[key][i]['name']] = {};
-					var groupColor = self.utils.getRandomColor();
-					self.groups[json.xml.game.groups[key][i]['name']].color = groupColor.rgb;
-					self.groups[json.xml.game.groups[key][i]['name']].location = json.xml.game.groups[key][i]['startingPoint'];
-				}
-			}
-		}
+
 
 		for(var j = 0; j < self.locations.length; j++) {
 			self.areas[self.locations[j].name] = {};
+			self.areas[self.locations[j].name].name = self.locations[j].name;
 			self.areas[self.locations[j].name].emergencies = {};
 			self.areas[self.locations[j].name].value = 1;
 
@@ -167,10 +193,14 @@ var GameState = require('./utils/GameState.js');
 
 
 
-			for(var em in json.xml.game.emergencies.emergency) self.createEmergency(self.locations[j].name,em.name,0);
+			for(var em in json.xml.game.emergencies.emergency) self.createEmergency(self.locations[j].name,json.xml.game.emergencies.emergency[em].name,0);
 
 				self.plots[self.locations[j].name+'-plot'].tooltip = {};
-				self.plots[self.locations[j].name+'-plot'].tooltip.content = self.utils.__buildTooltip(self.locations[j].name, self.locations[j].emergencies); //CREAZIONE TOOLTIPS
+				self.areas[self.locations[j].name].visualName = self.locations[j].visualName;
+
+				var showedName = self.utils.getDisplayedName(self.areas[self.locations[j].name]);
+		
+				self.plots[self.locations[j].name+'-plot'].tooltip.content = self.utils.__buildTooltip(showedName, self.areas[self.locations[j].name].emergencies); //CREAZIONE TOOLTIPS
 
 				self.plots[self.locations[j].name+'-plot'].tooltip.offset = {};
 
@@ -216,7 +246,30 @@ var GameState = require('./utils/GameState.js');
 
 			}
 
-			callback(self.areas,self.plots,self.links);
+
+
+			for(var key in json.xml.game.groups) {
+				if(json.xml.game.groups.hasOwnProperty(key)){
+					for(var i = 0; i< json.xml.game.groups[key].length;i++){
+						var keyName = json.xml.game.groups[key][i]['name'];
+						self.groups[keyName] = {};
+						self.groups[keyName].type = key;
+						if(key == 'actionGroup'){
+							self.groups[keyName].hq = [];
+							self.groups[keyName].startingPoint = json.xml.game.groups[key][i].startingPoint;
+							self.groups[keyName].location = json.xml.game.groups[key][i].startingPoint;
+							for(var j = 0; j<json.xml.game.groups[key][i]['headquarters'].headquarter.length;j++){
+								self.groups[keyName].hq.push(json.xml.game.groups[key][i]['headquarters']['headquarter'][j]);
+							}
+							var groupColor = self.utils.getRandomColor();
+							self.groups[keyName].color = groupColor.rgb;
+						}
+					}
+				}
+			}
+
+			callback[0](self.areas,self.plots,self.links);
+			callback[1](self.groups,self.plots,self.areas,self.hazard,self.utils);
 
 		},
 		error: function (exception) {
@@ -242,7 +295,10 @@ var GameState = require('./utils/GameState.js');
 
 
 	handleState(data) {
-
+		if(typeof data == 'string') {
+			console.warn('Parameter data is a string, parsing as JSON Object');
+			data = JSON.parse(data);
+		}
 		var diff = this.gameState.setState(data);
 		if(diff.length == 0) return;
 
@@ -250,7 +306,7 @@ var GameState = require('./utils/GameState.js');
 		var success = data.success;
 		var logString = data.logString;
 
-		for (var i = 0; i < diff.length; i++) {
+		//for (var i = 0; i < diff.length; i++) {
 			if (diff['currentState'] == 'GAME_ACTIVE') {
 
 			} else if (diff['currentState'] == 'GAME_VICTORY') {
@@ -288,8 +344,16 @@ var GameState = require('./utils/GameState.js');
 					/* Muove la pedina tramite movePawns(IDPEDINA,LOCAZIONESUCCESSIVA) */
 					if(this.groups[pawns[j].group].location != pawns[j].location){
 						/** Si è spostata la pedina pawnID del gruppo pawns[j].group in posizione pawns[j].location */
-						this.groups[pawns[j].group].location = pawns[j].location; //Aggiorno la posizione corrente della pedina del gruppo
-						this.hazard.movePawns(pawns[j].pawnID, pawns[j].location, pawns[j].group);
+						this.groups[pawns[j].group].location = pawns[j].location; //Aggiorno la posizione corrente della pedina del grupp
+						var position = {
+							"top" : this.plots[pawns[j].location+'-plot'].latitude,
+							"left" : this.plots[pawns[j].location+'-plot'].longitude
+
+						};
+
+						var group = {};
+						group[pawns[j].group] = this.groups[pawns[j].group].color;
+						this.hazard.setPawn(group, pawns[j].location,position );
 					}
 					this.hazard.addLog("INFO", logString);
 				}
@@ -324,29 +388,29 @@ var GameState = require('./utils/GameState.js');
 				/*COMUNICA CHE INIZIA IL TURNO AZIONE*/
 				let l = lang['currentlyPlaying'] + lang['actionGroup'];
 				this.hazard.addLog("INFO", logString);
-				updateTurn(lang['actionGroup']);
+				this.hazard.updateTurn(lang['actionGroup']);
 
 			} else if (diff['type'] == 'EmergencyTurn') {
 				/*COMUNICA CHE INIZIA IL TURNO EMERGENZA*/
 				let l = lang['currentlyPlaying'] + lang['emergencyGroup'];
 				this.hazard.addLog("INFO", l);
-				updateTurn(lang['emergencyGroup']);
+				this.hazard.updateTurn(lang['emergencyGroup']);
 
 			} else if (diff['type'] == 'EventTurn') {
 				/*COMUNICA CHE INIZIA IL TURNO EVENTI*/
 				let l = lang['currentlyPlaying'] + lang['eventGroup'];
 				this.hazard.addLog("INFO", l);
-				updateTurn(lang['eventGroup']);
+				this.hazard.updateTurn(lang['eventGroup']);
 
 			} else if (diff['type'] == 'ProductionGroup') {
 				/*COMUNICA CHE INIZIA IL TURNO PRODUZIONE*/
 				let l = lang['currentlyPlaying'] + lang['productionGroup'];
 				this.hazard.addLog("INFO", l);
-				updateTurn(lang['productionGroup']);
+				this.hazard.updateTurn(lang['productionGroup']);
 			}
 			if (diff['group']) {
 				var group = diff['group'];
-				for (var j = 0; j < group.resources; j++) {
+				for (var j = 0; j < group.resources.length; j++) {
 					/* Cambia le risorse presenti nella schermata del giocatore  tramite changeResources(risorsa,numero)*/
 					this.hazard.changeResources(group.resources[j].resource, group.resources[j].quantity);
 					this.hazard.addLog("INFO", logString);
@@ -359,7 +423,7 @@ var GameState = require('./utils/GameState.js');
 
 		}
 
-	}
+	//}
 
 }
 
