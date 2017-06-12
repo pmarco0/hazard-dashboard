@@ -38,11 +38,7 @@ class MapUtils {
 	 * @param {Number} duration [Durata dell'animazione in ms, default: 500]
 	 */
 	RemoveLink(link, duration = 500){
-		var self = this;
-		$(config['MAP_CONTAINER']).trigger('update'[{
-			deleteLinkKeys : self.link,
-			animDuration : self.duration,
-		}]);
+		$('[data-id="'+link+'"]').attr({'stroke': config['LINK_CLOSED_COLOR']});
 
 	}
 
@@ -54,20 +50,7 @@ class MapUtils {
 	 * @param {Integer} duration [Durata dell'animazione in ms, default: 500]
 	 */
 	AddLink(from,to,style,duration = 500){
-		var self = this;
-		$(config['MAP_CONTAINER']).trigger('update'[{
-			newLinks : {
-				link : {
-					factor : config['DEFAULT_PLOT_FACTOR'],
-					between : [self.from,self.to],
-					attrs : {
-						'stroke-width': config['DEFAULT_PLOT_STROKE'],
-						'stroke-dasharray' : self.style
-					},
-				},
-			},
-			animDuration : self.duration,
-		}]);
+		$('[data-id="'+link+'"]').attr({'stroke': config['LINK_OPEN_COLOR']});
 	}
 
 
