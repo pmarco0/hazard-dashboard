@@ -39,7 +39,7 @@ var GameState = require('./utils/GameState.js');
 	 	this.links = {};
 	 	this.pawns = {};
 		// Inizializzazione variabili di gioco
-		this.cards = {};
+		this.cards = [];
 		this.endGame = {};
 		this.groups = {};
 		this.locale = {};
@@ -64,7 +64,7 @@ var GameState = require('./utils/GameState.js');
 				self.gameStart('../../strutturaxml.xml');
 				this.INITIALIZED = true;
 			}
-			socket.emit('getState', '{}', function(data){
+			socket.emit('getState', {}, function(data){
 				self.handleState(data);
 			});
 		});
@@ -380,9 +380,11 @@ var GameState = require('./utils/GameState.js');
 		
 		if(data.hasOwnProperty('state')) 
 			var data = data.state;
+		
 		if(data.hasOwnProperty('currentTurn')) {
 			if(data.currentTurn.hasOwnProperty('cards')){
-				this.hazard.chooseCardPopup(data.currentTurn.cards);
+				this.cards = data.currentTurn.cards;
+				//this.hazard.chooseCardPopup(data.currentTurn.cards);
 			}
 		}
 

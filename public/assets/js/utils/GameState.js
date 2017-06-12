@@ -43,9 +43,13 @@ class GameState {
 		if(o.length > n.length) {
 			for(var i = 0;i<o.length;i++){
 				found = false;
-				for(var j =0;j<n.length;j++){
-					if(o[i].pawnID.substr(o[i].pawnID.indexOf("_")+1) == n[j].pawnID.substr(n[j].pawnID.indexOf("_")+1)){
-						found = true;
+				for(var j =0;j<n.length && !found;j++){
+					try {
+						if(o[i].pawnID.substr(o[i].pawnID.indexOf("_")+1) == n[j].pawnID.substr(n[j].pawnID.indexOf("_")+1)){
+							found = true;
+						}
+					}catch(e){
+						continue;
 					}
 				}
 				if(!found) {

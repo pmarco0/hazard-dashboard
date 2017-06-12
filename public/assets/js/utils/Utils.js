@@ -106,10 +106,13 @@ class Utils {
 		Colors.random = function() {
 		    var result;
 		    var count = 0;
-		    for (var prop in this.names)
+		    for (var prop in this.names) 
 		        if (Math.random() < 1/++count)
 		           result = prop;
-            return { name: result, rgb: this.names[result]};
+		    var returnRgb = this.names[result];
+		    var self = this;
+		    delete self.names[result];
+            return { name: result, rgb: returnRgb};
 
 		};
 

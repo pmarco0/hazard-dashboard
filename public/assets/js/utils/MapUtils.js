@@ -59,7 +59,7 @@ class MapUtils {
 	 * @param {String} fromv [ID univoco del plot relativo all'area di partenza (Plot)]
 	 * @param {String} tov   [ID univoco del plot relativo all'area di arrivo (Plot)]
 	 */
-	MovePlayer(fromv,tov) {
+	/*MovePlayer(fromv,tov) {
 		var movement = {
 			from: fromv,
 			to: tov,
@@ -77,7 +77,7 @@ class MapUtils {
 	 * @param  {String} plot [ID univoco del plot]
 	 * @return NA
 	 */
-	__removePlayer(plot){
+	/*__removePlayer(plot){
 		 var updatedOptions = {'plots': {}};
 		 updatedOptions.plots[plot] = {
 		 	type: config['DEFAULT_PLOT_TYPE'],
@@ -91,7 +91,7 @@ class MapUtils {
 	 * @param  {String} plot [ID univoco del plot]
 	 * @return NA
 	 */
-	__setPlayer(plot){
+	/*__setPlayer(plot){
 		 var updatedOptions = {'plots': {}};
 		 updatedOptions.plots[plot] = {
 		 	type: 'image',
@@ -100,7 +100,7 @@ class MapUtils {
 		 	height: config['DEFAULT_PLOT_ICON_HEIGHT'],
 		 }
 		 this.UpdateMap(updatedOptions);
-	}
+	}*/
 }
 
 module.exports = MapUtils;
