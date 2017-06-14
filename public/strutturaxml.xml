@@ -9,7 +9,6 @@
                 <name>ActionGroup1</name>
                 <emergenciesToSolve>
                     <emergencyToSolve>Malattia</emergencyToSolve>
-                    <emergencyToSolve>Peste</emergencyToSolve>
                 </emergenciesToSolve>
                 <resourcesUsed>
                     <resource>Medicinale</resource>
@@ -20,27 +19,10 @@
                 </headquarters>
                 <startingPoint>Australia</startingPoint>
             </actionGroup>
-            <actionGroup>
-                <name>ActionGroup2</name>
-                <emergenciesToSolve>
-                    <emergencyToSolve>Peste</emergencyToSolve>
-                </emergenciesToSolve>
-                <resourcesUsed>
-                    <resource>Medicinale</resource>
-                </resourcesUsed>
-                <headquarters>
-                    <headquarter>EuWest</headquarter>
-                    <headquarter>Scandinavia</headquarter>
-                </headquarters>
-                <startingPoint>Canada</startingPoint>
-            </actionGroup>
+
             <productionGroup>
                 <name>ProductionGroup1</name>
                 <maxNumTransportPawns>5</maxNumTransportPawns>
-            </productionGroup>
-            <productionGroup>
-                <name>ProductionGroup2</name>
-                <maxNumTransportPawns>8</maxNumTransportPawns>
             </productionGroup>
         </groups>
         <resources>
@@ -61,22 +43,6 @@
             </gravityLevels>
             <emergency>
                 <name>Malattia</name>
-                <resourceNeeded>Medicinale</resourceNeeded>
-                <generalHazardIndicator>
-                    <steps>
-                        <step>
-                            <level>1</level>
-                            <led>1</led>
-                        </step>
-                        <step>
-                            <level>2</level>
-                            <led>2</led>
-                        </step>
-                    </steps>
-                </generalHazardIndicator>
-            </emergency>
-            <emergency>
-                <name>Peste</name>
                 <resourceNeeded>Medicinale</resourceNeeded>
                 <generalHazardIndicator>
                     <steps>
@@ -242,7 +208,7 @@
             </led>
             <led>
               <number>11</number>
-              <emergency>Peste</emergency>
+              
             </led>
           </leds>
           <neighborhood>
@@ -264,7 +230,7 @@
             </led>
             <led>
               <number>11</number>
-              <emergency>Peste</emergency>
+              
             </led>
           </leds>
           <neighborhood>
@@ -284,7 +250,7 @@
             </led>
             <led>
               <number>11</number>
-              <emergency>Peste</emergency>
+              
             </led>
           </leds>
           <neighborhood>
@@ -306,7 +272,7 @@
             </led>
             <led>
               <number>11</number>
-              <emergency>Peste</emergency>
+              
             </led>
           </leds>
           <neighborhood>
@@ -329,7 +295,7 @@
             </led>
             <led>
               <number>11</number>
-              <emergency>Peste</emergency>
+              
             </led>
           </leds>
           <neighborhood>
@@ -352,7 +318,7 @@
             </led>
             <led>
               <number>11</number>
-              <emergency>Peste</emergency>
+              
             </led>
           </leds>
           <neighborhood>
@@ -373,7 +339,7 @@
             </led>
             <led>
               <number>11</number>
-              <emergency>Peste</emergency>
+              
             </led>
           </leds>
           <neighborhood>
@@ -393,7 +359,7 @@
             </led>
             <led>
               <number>11</number>
-              <emergency>Peste</emergency>
+              
             </led>
           </leds>
           <neighborhood>
@@ -415,7 +381,7 @@
             </led>
             <led>
               <number>11</number>
-              <emergency>Peste</emergency>
+              
             </led>
           </leds>
           <neighborhood>
@@ -436,7 +402,7 @@
             </led>
             <led>
               <number>11</number>
-              <emergency>Peste</emergency>
+              
             </led>
           </leds>
           <neighborhood>
@@ -456,7 +422,7 @@
             </led>
             <led>
               <number>11</number>
-              <emergency>Peste</emergency>
+              
             </led>
           </leds>
           <neighborhood>
@@ -477,7 +443,7 @@
             </led>
             <led>
               <number>11</number>
-              <emergency>Peste</emergency>
+              
             </led>
           </leds>
           <neighborhood>
@@ -497,7 +463,7 @@
             </led>
             <led>
               <number>11</number>
-              <emergency>Peste</emergency>
+              
             </led>
           </leds>
           <neighborhood>
@@ -517,7 +483,7 @@
             </led>
             <led>
               <number>11</number>
-              <emergency>Peste</emergency>
+              
             </led>
           </leds>
           <neighborhood>
@@ -538,7 +504,7 @@
             </led>
             <led>
               <number>11</number>
-              <emergency>Peste</emergency>
+              
             </led>
           </leds>
           <neighborhood>
@@ -560,7 +526,7 @@
             </led>
             <led>
               <number>11</number>
-              <emergency>Peste</emergency>
+              
             </led>
           </leds>
           <neighborhood>
@@ -581,7 +547,7 @@
             </led>
             <led>
               <number>11</number>
-              <emergency>Peste</emergency>
+              
             </led>
           </leds>
           <neighborhood>
@@ -603,7 +569,7 @@
             </led>
             <led>
               <number>11</number>
-              <emergency>Peste</emergency>
+              
             </led>
           </leds>
           <neighborhood>
@@ -626,7 +592,7 @@
             </led>
             <led>
               <number>11</number>
-              <emergency>Peste</emergency>
+              
             </led>
           </leds>
           <neighborhood>
@@ -646,7 +612,7 @@
             </led>
             <led>
               <number>11</number>
-              <emergency>Peste</emergency>
+              
             </led>
           </leds>
           <neighborhood>
@@ -666,7 +632,7 @@
             </led>
             <led>
               <number>11</number>
-              <emergency>Peste</emergency>
+              
             </led>
           </leds>
           <neighborhood>
@@ -687,7 +653,7 @@
             </led>
             <led>
               <number>11</number>
-              <emergency>Peste</emergency>
+              
             </led>
           </leds>
           <neighborhood>
@@ -707,7 +673,7 @@
             </led>
             <led>
               <number>11</number>
-              <emergency>Peste</emergency>
+              
             </led>
           </leds>
           <neighborhood>
@@ -727,7 +693,7 @@
             </led>
             <led>
               <number>11</number>
-              <emergency>Peste</emergency>
+              
             </led>
           </leds>
           <neighborhood>
@@ -747,7 +713,7 @@
             </led>
             <led>
               <number>11</number>
-              <emergency>Peste</emergency>
+              
             </led>
           </leds>
           <neighborhood>
@@ -774,7 +740,7 @@
                 <strongholdName>Ospedale</strongholdName>
             </strongholdInfo>
             <strongholdInfo>
-                <emergency>Peste</emergency>
+                
                 <resourceNeeded>Medicinale</resourceNeeded>
                 <strongholdName>Lazzaretto</strongholdName>
             </strongholdInfo>
@@ -798,7 +764,7 @@
                 </settings>
             </emergencySetup>
             <emergencySetup>
-                <emergency>Peste</emergency>
+                
                 <settings>
                     <setting>
                         <gravityLevel>2</gravityLevel>
