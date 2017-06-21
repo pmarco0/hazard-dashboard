@@ -1,4 +1,5 @@
 window.$ = window.jQuery   = require('jquery');
+var bootstrap = require('bootstrap')
 var Raphael = require('raphael');
 require('jquery-mousewheel');
 var io = require('./lib/socket.io.min.js');
@@ -29,9 +30,47 @@ var GameState = require('./utils/GameState.js');
 	 		return this.charAt(0).toUpperCase() + this.slice(1).toLowerCase();
 	 	}
 
+	 	String.prototype.lowerCaseFirstLetter = function() {
+	 		return this.charAt(0).toLowerCase() + this.slice(1).toLowerCase();
+	 	}
+
+	 	String.prototype.lowerCaseOnlyFirstLetter = function() {
+	 		return this.charAt(0).toLowerCase() + this.slice(1);
+	 	}
+
 	 	Number.prototype.inRange = function(a,b){
 	 		return (a < b ? this >= a && this <= b : this >= b && this <= a);
 	 	}
+
+	 	// Warn if overriding existing method
+		if(Array.prototype.equals)
+		    console.warn("Overriding existing Array.prototype.equals. Possible causes: New API defines the method, there's a framework conflict or you've got double inclusions in your code.");
+		// attach the .equals method to Array's prototype to call it on any array
+		Array.prototype.equals = function (array) {
+		    // if the other array is a falsy value, return
+		    if (!array)
+		        return false;
+
+		    // compare lengths - can save a lot of time 
+		    if (this.length != array.length)
+		        return false;
+
+		    for (var i = 0, l=this.length; i < l; i++) {
+		        // Check if we have nested arrays
+		        if (this[i] instanceof Array && array[i] instanceof Array) {
+		            // recurse into the nested arrays
+		            if (!this[i].equals(array[i]))
+		                return false;       
+		        }           
+		        else if (this[i] != array[i]) { 
+		            // Warning - two different object instances will never be equal: {x:20} != {x:20}
+		            return false;   
+		        }           
+		    }       
+		    return true;
+		}
+		// Hide method from for-in loops
+		Object.defineProperty(Array.prototype, "equals", {enumerable: false});
 
 
 	 	this.areas = {};
@@ -46,8 +85,11 @@ var GameState = require('./utils/GameState.js');
 		this.locations = {}; 
 		this.resources = {};
 		this.setup = {};
+		this.blockades = [];
 		this.strongholdinfos = {};
 		this.turns = {};
+		this.lastOrdNumber = -1;
+
 
 
 		this.hazard = new Dashboard();
@@ -70,7 +112,6 @@ var GameState = require('./utils/GameState.js');
 		});
 
 		socket.on('update',function(data){
-			console.log(data);
 			self.handleState(data);
 		});
 
@@ -83,11 +124,8 @@ var GameState = require('./utils/GameState.js');
 		});
 
 		socket.on('chooseProductionCard',function(data){
-			console.log(data);
-			if(typeof(data) != `undefined` && typeof(data.cardIndex != `undefined`)) {
-				self.hazard.chooseCard(data.cardIndex);
-				self.handleState(data);
-			}
+			self.handleState(data);
+			
 		});
 
 		/**socket.on('init',function(data){
@@ -106,7 +144,7 @@ var GameState = require('./utils/GameState.js');
 	 gameStart(e){
 	 	var self = this;
 	 	this.hazard.initDashboard();
-	 	this.hazard.hideModal(3000);
+	 	//this.hazard.hideModal(3000);
 	 	//this.hazard.updateTurn();
 	 	//this.hazard.addLog('INFO',lang['gamestartstext']);
 	 	var dummyStateCallback = this.initDummyState.bind(this);
@@ -127,6 +165,11 @@ var GameState = require('./utils/GameState.js');
 	 gameOver(){
 	 	this.hazard.addLog('DANGER',lang['gameover']);
 	 	this.hazard.showModal(lang['gameover'],lang['gameovertext'],'modal-danger');
+	 }
+
+	 gameVictory() {
+	 	this.hazard.addLog('INFO',lang['gameVictorytext']);
+	 	this.hazard.showModal(lang['gamevictory'],lang['gameVictorytext'],'modal-success');
 	 }
 
 
@@ -219,7 +262,8 @@ var GameState = require('./utils/GameState.js');
 		//ciclo le l'xml di setup gioco
 		self.cards = json.xml.game.cards;					
 		self.endGame = json.xml.game.endGame;
-		self.resources = json.xml.game.resources;					
+		self.resources = json.xml.game.resources;
+
 		//self.groups = json.xml.game.groups;
 		self.locale = json.xml.game.locale;
 		self.locations = [];
@@ -227,6 +271,7 @@ var GameState = require('./utils/GameState.js');
 		for(var i = 0; i<json.xml.game.map.area.length ;i++) {
 			self.locations = self.locations.concat(json.xml.game.map.area[i].location);
 		}
+		
 		
 
 		if(typeof self.resources['name'] == 'string') {
@@ -243,8 +288,8 @@ var GameState = require('./utils/GameState.js');
 			self.areas[self.locations[j].name].name = self.locations[j].name;
 			self.areas[self.locations[j].name].emergencies = {};
 			self.areas[self.locations[j].name].value = 1;
-			if(self.locations.hasOwnProperty('color')){
-				self.areas[self.locations[j].name].color = self.locations.color;
+			if(self.locations[j].hasOwnProperty('color')){
+				self.areas[self.locations[j].name].color = self.locations[j].color;
 			}else {
 				self.areas[self.locations[j].name].color = config['DEFAULT_AREA_COLOR'];
 			}
@@ -272,7 +317,7 @@ var GameState = require('./utils/GameState.js');
 
 				var showedName = self.utils.getDisplayedName(self.areas[self.locations[j].name]);
 		
-				self.plots[self.locations[j].name+'-plot'].tooltip.content = self.utils.__buildTooltip(showedName, self.areas[self.locations[j].name].emergencies); //CREAZIONE TOOLTIPS
+				self.plots[self.locations[j].name+'-plot'].tooltip.content = self.utils.__buildTooltip(self.areas[self.locations[j].name].name, showedName, self.areas[self.locations[j].name].emergencies); //CREAZIONE TOOLTIPS
 
 				self.plots[self.locations[j].name+'-plot'].tooltip.offset = {};
 
@@ -315,6 +360,7 @@ var GameState = require('./utils/GameState.js');
 						self.setup = json.xml.game.setup;
 						self.strongholdinfos = json.xml.game.strongholdinfos;
 						self.turns = json.xml.game.turns;
+						delete(self.turns.numOfProductionCards);
 
 			}
 
@@ -387,21 +433,26 @@ var GameState = require('./utils/GameState.js');
 
 	eliminateEmergency(locationID,area) {
 		this.areas[locationID].emergencies[emergency].level = -1;
-		this.hazard.updateEmergenciesTooltip(locationID,this.areas[locationID].emergencies)
+		this.hazard.updateEmergenciesTooltip(this.utils.getDisplayedName(this.areas[locationID]),locationID,this.areas[locationID].emergencies)
 	}
 
 	setEmergency(locationID,emergency,level){
 		var initialization = (typeof this.areas[locationID].emergencies[emergency] == 'undefined');
 		this.areas[locationID].emergencies[emergency].level = level;
-		if(!initialization) this.hazard.updateEmergenciesTooltip(locationID,this.areas[locationID].emergencies)
+		try {
+			if(!initialization) 
+				this.hazard.updateEmergenciesTooltip(this.utils.getDisplayedName(this.areas[locationID]),locationID,this.areas[locationID].emergencies);
 			else
-		this.areas[locationID].emergencies[emergency].hasStronghold = false;
-	}
+				this.areas[locationID].emergencies[emergency].hasStronghold = false;
+		} catch(e) {
+			console.error('setEmergency Error { location : '+locationID+', emergency: '+emergency+', level: '+level+', this.areas :'+this.areas+'}');
+		}
+	}	
 	
 
 	buildStronghold(emergency,location){
 		this.areas[location].emergencies[emergency].hasStronghold = true;
-		this.hazard.updateEmergenciesTooltip(location,this.areas[location].emergencies);
+		this.hazard.updateEmergenciesTooltip(this.utils.getDisplayedName(this.areas[location]),location,this.areas[location].emergencies);
 	}
 
 
@@ -410,21 +461,46 @@ var GameState = require('./utils/GameState.js');
 			console.warn('Parameter data is a string, parsing as JSON Object');
 			data = JSON.parse(data);
 		}
-		this.hazard.testBasic();
 		if(data.hasOwnProperty('response')) 
 			var response = data.response;
 		else 
 			var response = {};
-		
-		if(data.hasOwnProperty('state')) 
+
+		if(data.hasOwnProperty('cardIndex') && typeof cardIndex == 'undefined') {
+			var cardIndex = data.cardIndex;
+		}
+
+		if(data.hasOwnProperty('state') && data.state.hasOwnProperty('currentTurn')){
+			var currentTurn = data.state.currentTurn;
 			var data = data.state;
-		
-		if(data.hasOwnProperty('currentTurn')) {
+		}else if(data.hasOwnProperty('state')){
+			var data = data.state;
+		}
+
+		if(data.hasOwnProperty('currentTurn')){
+			var currentTurn = data.currentTurn;
+		}
+
+		if(currentTurn.hasOwnProperty('selectedCards') && currentTurn.state == 'CHOOSE_PRODUCTION_CARDS'){
+			var cardIndex = currentTurn.selectedCards;
+			var numOfProductionCards = data.gameState.numOfProductionCards;
+			this.hazard.updateCardCount(numOfProductionCards - cardIndex.length);
+		}
+
+		if(!data.hasOwnProperty('cardIndex') && currentTurn.state == 'CHOOSE_PRODUCTION_CARDS') {
 			if(data.currentTurn.hasOwnProperty('cards')){
-				this.cards = data.currentTurn.cards;
-				//this.hazard.chooseCardPopup(data.currentTurn.cards);
+				for(var i =0;i<data.currentTurn.cards.length;i++){
+					var disp = this.utils.getDisplayedName(this.areas[data.currentTurn.cards[i].location]);
+					data.currentTurn.cards[i].locationFix = disp;
+				}
+				this.hazard.chooseCardPopup(data.currentTurn.cards);
 			}
 		}
+
+		if(typeof cardIndex != 'undefined' && currentTurn.state != 'CHOOSE_PRODUCTION_CARDS') {
+			this.hazard.chooseCard(cardIndex);
+		}
+
 
 		try {
 			data.gameState.emergencies[0].generalHazardIndicator.currentStepIndex += 1;
@@ -435,7 +511,7 @@ var GameState = require('./utils/GameState.js');
 
 		var status = data.gameState.currentState;
 		var success = response.success;
-		var logString = response.logString;
+		var logString = this.utils.findAndReplaceArea(this.areas,response.logString);
 
 		//for (var i = 0; i < diff.length; i++) {
 			if (diff['currentState'] == 'GAME_ACTIVE') {
@@ -481,7 +557,7 @@ var GameState = require('./utils/GameState.js');
 							condition = false;
 						}finally {
 							if(condition){
-								console.log("Moving "+pawns[j].group + ", Pawn Number: "+id);
+								console.log("Moving "+pawns[j].group + ", Pawn Number: "+id+ "to "+pawns[j].location);
 								/** Si è spostata la pedina pawnID del gruppo pawns[j].group in posizione pawns[j].location */
 								this.groups[pawns[j].group].pawns[id] = {};
 								this.groups[pawns[j].group].pawns[id].location = pawns[j].location; //Aggiorno la posizione corrente della pedina del grupp
@@ -506,10 +582,14 @@ var GameState = require('./utils/GameState.js');
 			if(diff['removedPawns']) {
 				for(var j=0;j< diff['removedPawns'].length;j++){
 					var pawn = diff['removedPawns'][j];
-					var id = pawn.substr(pawn.indexOf("_")+1);
-					var group  = {};
-					group[id] = "#FFFFFF";
-					this.hazard.removePawn(group);
+					try {
+						if(typeof pawn != 'undefined') {
+							var id = pawn.substr(pawn.indexOf("_") + 1);
+							var group = {};
+							group[id] = "#FFFFFF";
+							this.hazard.removePawn(group);
+						}
+					} catch (e) {}
 				}
 			}
 
@@ -530,69 +610,83 @@ var GameState = require('./utils/GameState.js');
 					}
 					
 					if(typeof(this.links[link]) == `undefined`)
-						throw new Error('Undefined type for blockade');
-					else
-						this.hazard.CloseLink(link);
+						throw new Error('Blockade not found');
+					else {
+						if($.inArray(link,this.blockades) == -1){
+							this.blockades.push(link);
+							this.hazard.CloseLink(link);
+						}
+					}
+
 				}
+
+				var found;
+				for(var i =0;i<this.blockades.length;i++){
+					found = false;
+					for(var j = 0; j< diff['blockades'].length;j++){
+						if(this.blockades[i].split("-").sort().equals(diff['blockades'][j].locations.sort())) {
+							found = true;
+							continue;
+						}
+					}
+					if(!found) {
+						this.blockades.splice(i,1);
+						this.hazard.OpenLink(this.blockades[i]);
+					}
+				}
+					
 			}
 
 
 			if (diff['contagionRatios']){
-				console.log(diff['contagionRatios'][0].contagionRatio);
 				this.hazard.setProgress(diff.contagionRatios[0].contagionRatio*100);
 			}
 
-			if (diff['type'] == 'ActionTurn') {
-				/*COMUNICA CHE INIZIA IL TURNO AZIONE*/
-				let l = lang['currentlyPlaying'] + lang['actionGroup'];
-				this.hazard.addLog("INFO", logString);
-				this.hazard.updateTurn(lang['actionGroup']);
 
+			var newTurn = (this.turns[diff['currentGroup'].lowerCaseOnlyFirstLetter()].ordNum == 1 && this.turns[diff['currentGroup'].lowerCaseOnlyFirstLetter()].ordNum != this.lastOrdNumber);
+			this.lastOrdNumber = this.turns[diff['currentGroup'].lowerCaseOnlyFirstLetter()].ordNum;
+
+			if (diff['type'] == 'ActionTurn') {
+				this.hazard.updateTurn(lang['actionGroup'],newTurn);
 			} else if (diff['type'] == 'EmergencyTurn') {
-				/*COMUNICA CHE INIZIA IL TURNO EMERGENZA*/
-				let l = lang['currentlyPlaying'] + lang['emergencyGroup'];
-				this.hazard.addLog("INFO", l);
-				this.hazard.updateTurn(lang['emergencyGroup']);
+				this.hazard.updateTurn(lang['emergencyGroup'],newTurn);
 
 			} else if (diff['type'] == 'EventTurn') {
-				/*COMUNICA CHE INIZIA IL TURNO EVENTI*/
-				let l = lang['currentlyPlaying'] + lang['eventGroup'];
-				this.hazard.addLog("INFO", l);
-				this.hazard.updateTurn(lang['eventGroup']);
+				this.hazard.updateTurn(lang['eventGroup'],newTurn);
 
-			} else if (diff['type'] == 'ProductionGroup') {
-				/*COMUNICA CHE INIZIA IL TURNO PRODUZIONE*/
-				let l = lang['currentlyPlaying'] + lang['productionGroup'];
-				this.hazard.addLog("INFO", l);
-				this.hazard.updateTurn(lang['productionGroup']);
+			} else if (diff['type'] == 'ProductionTurn') {
+				this.hazard.updateTurn(lang['productionGroup'],newTurn);
 			}
+
 			
-			try {
-				if (diff['group'] && Object.keys(diff['resources']).length > 0) {
-					try {
-						this.hazard.clearResources();
-						for (var j = 0; j <diff['resources'].length; j++) {
-							/* Cambia le risorse presenti nella schermata del giocatore  tramite changeResources(risorsa,numero)*/
-							this.hazard.changeResources(diff['resources'][j].resource, diff['resources'][j].quantity);
-						}
-					} catch (e){
-						console.warn("Empty resources");
+			if(diff.hasOwnProperty('resources')){
+				try {
+					this.hazard.clearResources();
+					for (var j = 0; j <diff['resources'].length; j++) {
+						/* Cambia le risorse presenti nella schermata del giocatore  tramite changeResources(risorsa,numero)*/
+						this.hazard.changeResources(diff['resources'][j].resource, diff['resources'][j].quantity);
 					}
+				} catch (e){
+					console.warn("Empty resources");
 				}
-			}catch(e) {}
+			}
 
 			if(diff['numActions'] || diff['maxNumActions']){
 				this.hazard.setActions(diff['numActions'],diff['maxNumActions']);
 			}
 
+			if(diff['currentGroup'] != 'ActionTurn') {
+				this.hazard.hideActions();
+			}
+
 			if(diff['currentGroup'] == "EventTurn") {
-				this.hazard.addLog("INFO",response.responses[0].logString);
-				this.hazard.showModal("Evento",response.responses[0].logString);
-				this.hazard.hideModal(4000);
+				this.hazard.addLog("INFO",this.utils.findAndReplaceArea(this.areas,response.responses[0].logString));
+				this.hazard.showModal("Evento",this.utils.findAndReplaceArea(this.areas,response.responses[0].logString));
+				this.hazard.hideModal(2000);
 			}else if(diff['currentGroup'] == 'EmergencyTurn'){
 				this.hazard.addLog("INFO",response.logString);
 				this.hazard.showModal("Emergenza",response.logString);
-				this.hazard.hideModal(4000);
+				this.hazard.hideModal(2000);
 			}
 			else 
 				this.hazard.addLog("INFO", logString);

@@ -23,36 +23,6 @@ class Dashboard {
 		this.PawnMan = new PawnManager();
 	}
 
-
-	/*TEST DA RIMUOVERE*/
-
-	testBasic () {
-		this.CloseLink('Canada-plot.USA-plot');
-	}
-
-	test() {
-	   var self = this;
-	   var updatedOptions = {'areas': {}, 'plots': {}};
-	   var vars = [];
-	   vars['Risorsa 1'] = 50;
-	   vars['Risorsa 2'] = 40;
-	   console.log(self.utils.__buildTooltip('Canada',vars));
-	   updatedOptions.areas['America2'] = {
-	   		value: 3,
-	   };
-	   	 updatedOptions.plots['canada'] = {
-		 	type: 'image',
-		 	url : './assets/img/icon.png',
-		 	width: 8,
-		 	height: 8,
-		 				latitude: 70,
-				longitude: 50,
-		 	tooltip : self.utils.__buildTooltip('Canada',vars),
-		 }
-	   this.map.UpdateMap(updatedOptions,{},{});
-	   this.map.MovePlayer('canada','usa');
-	}
-
 	/**
 	 * [initDashboard description]
 	 * @return {NA} 
@@ -85,6 +55,7 @@ class Dashboard {
 				},
 				attrsHover : {
 					fill: "#5BCA09",
+					"fill-opacity" : 0,
 				},
 			},
 
@@ -195,27 +166,37 @@ class Dashboard {
 	 * @param  {Object} emergency [Emergenze dell'area]
 	 * @return {NA}
 	 */
-	updateEmergenciesTooltip(area,emergency){
-		$('#'+area+'-tooltiplist').replaceWith(this.utils.__buildTooltip(area,emergency));
+	updateEmergenciesTooltip(area,id,emergency){
+		$('#'+id+'-tooltiplist').replaceWith(this.utils.__buildTooltip(id,area,emergency));
 	}
 
 
 	chooseCardPopup(cards){
-		this.modal.setTitle('Carte Produzione');
-		this.modal.setup();
-		this.modal.setContentCardsTextOnly(cards);
-		this.modal.show();
+		this.modal.setContentCards(cards);
 
 	}
 
 	chooseCard(cardID) {
+		var displayedNumber = "";
+		if(typeof cardID == 'number' || typeof cardID == 'string') {
+			displayedNumber = parseInt(cardID)+1
+			this.addLog('INFO', lang['cardChosen']+ displayedNumber);
+		}else if(cardID.hasOwnProperty('length')) {
+			for(var j =0;j<cardID.length;j++){
+				displayedNumber += parseInt(cardID[j]) +1;
+				if(j != cardID.length -1) displayedNumber += ", ";
+			}
+			this.addLog('INFO', lang['multipleCardChosen']+ displayedNumber);
+		}
 		this.modal.selectCard(cardID);
-		this.hideModal(3000);
-		this.addLog('INFO','E\' stata scelta la carta '+cardID);
 	}	
 
 	setActions(current,max){
-		$('#actions').html('Azioni Disponibili: '+current+'/'+max);
+		$(config['ACTIONS_ID']).html(lang['actionsDoneTitle']+current+'/'+max);
+	}
+
+	hideActions() {
+		$(config['ACTIONS_ID']).empty();
 	}
 
 	/**
@@ -305,7 +286,8 @@ class Dashboard {
 			return;
 		}
 		var d = new Date();
-		var time = d.getHours() + ":" + d.getMinutes();
+		var time = d.
+		getHours() + ":" + d.getMinutes();
 		var timestamp = d.getTime();
 		switch(type.toUpperCase()){
 			case "DANGER":
@@ -339,13 +321,20 @@ class Dashboard {
 	 * @param {String} [who] [Nome del gruppo]
 	 * @return NA
 	 */
-	updateTurn(who = null) {
-		var turn = parseInt($(config['TURN_LOCATION']).attr('turn'));
-		turn=turn+1;
-		$(config['TURN_LOCATION']).attr('turn',turn);
-		$(config['TURN_LOCATION']).html(lang['turn']+" "+turn);
-		this.addLog('INFO',lang['turn_start'] +' '+turn)
+	updateTurn(who = null,newTurn = false) {
+		if(newTurn) {
+			var turn = parseInt($(config['TURN_LOCATION']).attr('turn'));
+			turn=turn+1;
+			$(config['TURN_LOCATION']).attr('turn',turn);
+			$(config['TURN_LOCATION']).html(lang['turn']+" "+turn);
+			this.addLog('INFO',lang['turn_start'] +' '+turn);
+		}
 		if(who) $(config['TURN_GROUP_LOCATION']).html(who);
+	}
+
+	updateCardCount(count) {
+		$(config['CARD_COUNT_ID']).empty();
+		$(config['CARD_COUNT_ID']).html(lang['cardCountText'] + count);
 	}
 
 	/**
@@ -357,12 +346,14 @@ class Dashboard {
 	 * @return NA
 	 */
 	showModal(title,content,clazz) {
-		if(this.modal.isVisible()) modal.hide();
+			if(this.modal.isVisible()) this.modal.hide();
 
-		this.modal.setup(clazz);
-		this.modal.setTitle(title);
-		this.modal.setContent(content);
-		this.modal.show();
+			this.modal.setup(clazz);
+			this.modal.setTitle(title);
+			this.modal.setContent(content);
+			this.modal.show();
+
+
 	}
 
 	/**
